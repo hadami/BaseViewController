@@ -18,7 +18,35 @@ enum TextFieldState: Equatable {
     case disabled
 }
 
-class SingleLineTextField: UIView {
+class SingleLineTextFieldReactor: Reactor {
+    enum ActionType {
+    }
+    
+    enum Action {
+    }
+    
+    enum Mutation {
+    }
+    
+    struct State {
+        let type: TextFieldState
+    }
+    
+    let initialState: State
+    
+    init(type: TextFieldState) {
+        initialState = State(type: type)
+    }
+}
+
+class SingleLineTextField: UIView, ReactorKit.View, ConfigurableContainerView {
+    typealias DataType = SingleLineTextFieldReactor
+    func configure(data: SingleLineTextFieldReactor) {
+        bind(reactor: data)
+    }
+    func bind(reactor: SingleLineTextFieldReactor) {
+        setState(state: reactor.currentState.type)
+    }
     
     var textField: UITextField = {
         let v = UITextField()
@@ -94,7 +122,8 @@ class SingleLineTextField: UIView {
         textField.snp.remakeConstraints {
             $0.left.equalToSuperview()
             $0.right.equalToSuperview().inset(39)
-            $0.centerY.equalTo(deleteButton.snp.centerY)
+            $0.top.equalToSuperview().inset(32)
+            $0.bottom.equalToSuperview().inset(30)
         }
         
         deleteButton.snp.remakeConstraints {
@@ -131,7 +160,7 @@ class SingleLineTextField: UIView {
         }).disposed(by: disposeBag)
     }
     
-    func setState(state: TextFieldState) {
+    private func setState(state: TextFieldState) {
         switch state {
         case .editing:
             let color = UIColor.blue

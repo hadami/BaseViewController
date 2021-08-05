@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     }
     
     private func goTo(vc: UIViewController) {
+        vc.modalPresentationStyle = .overFullScreen
         self.present(vc, animated: true, completion: nil)
     }
 
@@ -25,6 +26,15 @@ class ViewController: UIViewController {
     
     @IBAction func goToTable(_ sender: Any) {
         let vc = TableViewController()
+        
+        var items = [CellConfigurator]()
+        for _ in 0..<10 {
+            let conf = TableComps.Conf.SingleLineTextField(item: .init(type: .done))
+            let buttonConf = TableComps.Conf.BottomButton(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            items.append(conf)
+            items.append(buttonConf)
+        }
+        vc.reactor = .init(items: items)
         goTo(vc: vc)
     }
     

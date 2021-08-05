@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		866D84B00CD6FB2EFAB2F015 /* Pods_Base.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85049482C23935C92CBA1068 /* Pods_Base.framework */; };
+		897EFF6926BBDFAE006AF830 /* CellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897EFF6826BBDFAE006AF830 /* CellConfigurator.swift */; };
 		89953F8226BA7C5100C28C86 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89953F8126BA7C5100C28C86 /* AppDelegate.swift */; };
 		89953F8626BA7C5100C28C86 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89953F8526BA7C5100C28C86 /* ViewController.swift */; };
 		89953F8926BA7C5100C28C86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89953F8726BA7C5100C28C86 /* Main.storyboard */; };
@@ -16,6 +17,8 @@
 		89953F9A26BA7E9E00C28C86 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89953F9926BA7E9E00C28C86 /* BaseViewController.swift */; };
 		89953FEA26BA81A500C28C86 /* StackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89953FE926BA81A500C28C86 /* StackViewController.swift */; };
 		89953FF326BA840200C28C86 /* BaseNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89953FF226BA840200C28C86 /* BaseNavigationView.swift */; };
+		89AA2BA226C0F0D0007B28F1 /* BottomButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AA2BA126C0F0D0007B28F1 /* BottomButtonView.swift */; };
+		89B31E4026BD0A1D0082C3CF /* CellContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */; };
 		89D9D85026BAA30E00737E3A /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D9D84F26BAA30E00737E3A /* TableViewController.swift */; };
 		89D9D85426BAA31E00737E3A /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D9D85326BAA31E00737E3A /* CollectionViewController.swift */; };
 		89D9D86F26BAADAD00737E3A /* SingleLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D9D86E26BAADAD00737E3A /* SingleLineTextField.swift */; };
@@ -24,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		85049482C23935C92CBA1068 /* Pods_Base.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Base.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		897EFF6826BBDFAE006AF830 /* CellConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellConfigurator.swift; sourceTree = "<group>"; };
 		89953F7E26BA7C5100C28C86 /* Base.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Base.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89953F8126BA7C5100C28C86 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89953F8526BA7C5100C28C86 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -34,6 +38,8 @@
 		89953F9926BA7E9E00C28C86 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		89953FE926BA81A500C28C86 /* StackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackViewController.swift; sourceTree = "<group>"; };
 		89953FF226BA840200C28C86 /* BaseNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationView.swift; sourceTree = "<group>"; };
+		89AA2BA126C0F0D0007B28F1 /* BottomButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtonView.swift; sourceTree = "<group>"; };
+		89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellContainer.swift; sourceTree = "<group>"; };
 		89D9D84F26BAA30E00737E3A /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		89D9D85326BAA31E00737E3A /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		89D9D86E26BAADAD00737E3A /* SingleLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleLineTextField.swift; sourceTree = "<group>"; };
@@ -92,14 +98,14 @@
 		89953F8026BA7C5100C28C86 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				89D9D86D26BAAD8200737E3A /* View */,
+				89D9D87326BAADB300737E3A /* ViewControllers */,
 				89953F8126BA7C5100C28C86 /* AppDelegate.swift */,
 				89953F8526BA7C5100C28C86 /* ViewController.swift */,
 				89953F8726BA7C5100C28C86 /* Main.storyboard */,
 				89953F8A26BA7C5300C28C86 /* Assets.xcassets */,
 				89953F8C26BA7C5300C28C86 /* LaunchScreen.storyboard */,
 				89953F8F26BA7C5300C28C86 /* Info.plist */,
-				89D9D86D26BAAD8200737E3A /* View */,
-				89D9D87326BAADB300737E3A /* ViewControllers */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -107,9 +113,12 @@
 		89D9D86D26BAAD8200737E3A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */,
+				897EFF6826BBDFAE006AF830 /* CellConfigurator.swift */,
 				89953FF226BA840200C28C86 /* BaseNavigationView.swift */,
 				89D9D86E26BAADAD00737E3A /* SingleLineTextField.swift */,
 				89D9D87526BAD22C00737E3A /* ScrollStackView.swift */,
+				89AA2BA126C0F0D0007B28F1 /* BottomButtonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -240,13 +249,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D9D87626BAD22C00737E3A /* ScrollStackView.swift in Sources */,
+				89B31E4026BD0A1D0082C3CF /* CellContainer.swift in Sources */,
 				89953F8626BA7C5100C28C86 /* ViewController.swift in Sources */,
 				89D9D85026BAA30E00737E3A /* TableViewController.swift in Sources */,
 				89953FEA26BA81A500C28C86 /* StackViewController.swift in Sources */,
 				89953F8226BA7C5100C28C86 /* AppDelegate.swift in Sources */,
 				89D9D85426BAA31E00737E3A /* CollectionViewController.swift in Sources */,
+				89AA2BA226C0F0D0007B28F1 /* BottomButtonView.swift in Sources */,
 				89953F9A26BA7E9E00C28C86 /* BaseViewController.swift in Sources */,
 				89953FF326BA840200C28C86 /* BaseNavigationView.swift in Sources */,
+				897EFF6926BBDFAE006AF830 /* CellConfigurator.swift in Sources */,
 				89D9D86F26BAADAD00737E3A /* SingleLineTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

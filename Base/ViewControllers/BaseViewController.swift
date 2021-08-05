@@ -14,7 +14,7 @@ class BaseViewController<T: UIView>: UIViewController {
     typealias ViewType = T
     
     private(set) var navigationView = BaseNavigationView()
-    let baseView: ViewType
+    var baseView: ViewType
     
     var disposeBag = DisposeBag()
     

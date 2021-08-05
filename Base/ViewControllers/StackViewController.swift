@@ -12,7 +12,7 @@ class StackViewController: BaseViewController<ScrollStackView> {
     override init(view: BaseViewController<ScrollStackView>.ViewType) {
         super.init(view: view)
         
-        navigationView.isHidden = true
+//        navigationView.isHidden = true
     }
     
     required init?(coder: NSCoder) {
@@ -30,6 +30,8 @@ class StackViewController: BaseViewController<ScrollStackView> {
         let telecomTextField = SingleLineTextField()
         let birthTextField = SingleLineTextField()
         let nameTextField = SingleLineTextField()
+//        let view = BottomButtonView()
+//        view.reactor = .init(type: .fixed(title: "확인", state: .primary))
         
         let array = [phoneTextField, telecomTextField, birthTextField, nameTextField,
                      phoneTextField, telecomTextField, birthTextField, nameTextField,
@@ -53,12 +55,11 @@ class StackViewController: BaseViewController<ScrollStackView> {
 
         }
         
-        for view in baseView.stackView.arrangedSubviews {
-            view.snp.remakeConstraints {
-                $0.height.equalTo(86)
-            }
-        }
-
+//        for view in baseView.stackView.arrangedSubviews {
+//            view.snp.remakeConstraints {
+//                $0.height.equalTo(86)
+//            }
+//        }
     }
 
 }
