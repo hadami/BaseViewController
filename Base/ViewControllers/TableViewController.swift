@@ -10,24 +10,39 @@ import RxCocoa
 import RxSwift
 import UIKit
 
-struct TableComps {
-    /// Cell typealias
-    struct Cell {
-        typealias SingleLineTextFieldCell = GenericTableViewCell<SingleLineTextField>
-        typealias BottomButtonCell = GenericTableViewCell<BottomButtonView>
-        
-        static var allTypes: [UITableViewCell.Type] {
-            return [
-                TableComps.Cell.SingleLineTextFieldCell.self,
-                TableComps.Cell.BottomButtonCell.self
-            ]
-        }
-    }
+protocol GenericTableView {
+    associatedtype CellType: ConfigurableCell where CellType: UITableViewCell
     
-    /// Configurator typealias
-    struct Conf {
-        typealias SingleLineTextField = TableCellConfigurator<TableComps.Cell.SingleLineTextFieldCell>
-        typealias BottomButton = TableCellConfigurator<TableComps.Cell.BottomButtonCell>
+    var viewType: CellType.ViewType.Type { get }
+    var confType: TableCellConfigurator<CellType>.Type { get }
+    var cellType: CellType.Type { get }
+}
+
+protocol GenericTableViewType: GenericTableView { }
+extension GenericTableViewType {
+    var viewType: CellType.ViewType.Type {
+        return TableCellConfigurator<CellType>.viewType
+    }
+    var confType: TableCellConfigurator<CellType>.Type {
+        return TableCellConfigurator<CellType>.confType
+    }
+    var cellType: CellType.Type {
+        return TableCellConfigurator<CellType>.cellType
+    }
+}
+
+class GenericTableComponent<T: ConfigurableContainerView>: GenericTableViewType {
+    typealias ViewType = T
+    typealias CellType = GenericTableViewCell<T>
+    
+    init() {
+        let v = self.viewType
+        let t = self.confType
+        let c = self.cellType
+        print(t)
+        print(c)
+//        TableCellConfigurator<GenericTableViewCell<SingleLineTextField>>
+//        GenericTableViewCell<SingleLineTextField>
     }
 }
 
@@ -52,7 +67,16 @@ class TableViewReactor: Reactor {
     }
 }
 
-class TableViewController: BaseViewController<UITableView>, ReactorKit.View {
+class TableViewController: BaseViewController<UITableView>, ReactorKit.View, GenericCellList {
+    var cellTypeList: [UITableViewCell.Type] = [] {
+        didSet {
+            cellTypeList.forEach({ type in
+                if let identifier = type as? GenericCellIdentifier.Type {
+                    baseView.register(type, forCellReuseIdentifier: identifier.reuseIdentifier)
+                }
+            })
+        }
+    }
     
     var itemArray = [CellConfigurator]() {
         didSet {
@@ -70,11 +94,16 @@ class TableViewController: BaseViewController<UITableView>, ReactorKit.View {
         baseView.delegate = self
         baseView.dataSource = self
         
-        TableComps.Cell.allTypes.forEach({ e in
-            if let identifier = e as? GenericCellIdentifier.Type {
-                baseView.register(e, forCellReuseIdentifier: identifier.reuseIdentifier)
-            }
-        })
+        cellTypeList = [
+            Table.Cell<SingleLineTextField>.self,
+            Table.Cell<BottomButtonView>.self
+        ]
+    }
+    
+    func setSelectedColor(_ color: UIColor, cell: UITableViewCell) {
+        let v = UIView()
+        v.backgroundColor = .red
+        cell.selectedBackgroundView = v
     }
     
     func bind(reactor: TableViewReactor) {
@@ -83,17 +112,26 @@ class TableViewController: BaseViewController<UITableView>, ReactorKit.View {
 }
 
 extension TableViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        baseView.deselectRow(at: indexPath, animated: true)
+    }
     
 }
 
 extension TableViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var height: CGFloat = 0
-        let item = itemArray[indexPath.row]
-        height = item.rowHeight(availableWidth: tableView.frame.width)
-        
-        return height
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        var height: CGFloat = 0
+//        let item = itemArray[indexPath.row]
+//        height = item.rowHeight(availableWidth: tableView.frame.width)
+//        
+//        return height
+//    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
     }

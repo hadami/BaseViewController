@@ -19,6 +19,7 @@
 		89953FF326BA840200C28C86 /* BaseNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89953FF226BA840200C28C86 /* BaseNavigationView.swift */; };
 		89AA2BA226C0F0D0007B28F1 /* BottomButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AA2BA126C0F0D0007B28F1 /* BottomButtonView.swift */; };
 		89B31E4026BD0A1D0082C3CF /* CellContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */; };
+		89B3D6C326CA99BD00563457 /* CellComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B3D6C226CA99BD00563457 /* CellComponent.swift */; };
 		89D9D85026BAA30E00737E3A /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D9D84F26BAA30E00737E3A /* TableViewController.swift */; };
 		89D9D85426BAA31E00737E3A /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D9D85326BAA31E00737E3A /* CollectionViewController.swift */; };
 		89D9D86F26BAADAD00737E3A /* SingleLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D9D86E26BAADAD00737E3A /* SingleLineTextField.swift */; };
@@ -40,6 +41,7 @@
 		89953FF226BA840200C28C86 /* BaseNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationView.swift; sourceTree = "<group>"; };
 		89AA2BA126C0F0D0007B28F1 /* BottomButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtonView.swift; sourceTree = "<group>"; };
 		89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellContainer.swift; sourceTree = "<group>"; };
+		89B3D6C226CA99BD00563457 /* CellComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellComponent.swift; sourceTree = "<group>"; };
 		89D9D84F26BAA30E00737E3A /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		89D9D85326BAA31E00737E3A /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		89D9D86E26BAADAD00737E3A /* SingleLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleLineTextField.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 		89D9D86D26BAAD8200737E3A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				89B3D6C226CA99BD00563457 /* CellComponent.swift */,
 				89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */,
 				897EFF6826BBDFAE006AF830 /* CellConfigurator.swift */,
 				89953FF226BA840200C28C86 /* BaseNavigationView.swift */,
@@ -249,6 +252,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D9D87626BAD22C00737E3A /* ScrollStackView.swift in Sources */,
+				89B3D6C326CA99BD00563457 /* CellComponent.swift in Sources */,
 				89B31E4026BD0A1D0082C3CF /* CellContainer.swift in Sources */,
 				89953F8626BA7C5100C28C86 /* ViewController.swift in Sources */,
 				89D9D85026BAA30E00737E3A /* TableViewController.swift in Sources */,

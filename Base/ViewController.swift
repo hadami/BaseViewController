@@ -29,8 +29,8 @@ class ViewController: UIViewController {
         
         var items = [CellConfigurator]()
         for _ in 0..<10 {
-            let conf = TableComps.Conf.SingleLineTextField(item: .init(type: .done))
-            let buttonConf = TableComps.Conf.BottomButton(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            let conf = Table.Configurator<SingleLineTextField>(item: .init(type: .done))
+            let buttonConf = Table.Configurator<BottomButtonView>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
             items.append(conf)
             items.append(buttonConf)
         }
@@ -40,6 +40,12 @@ class ViewController: UIViewController {
     
     @IBAction func goToCollection(_ sender: Any) {
         let vc = CollectionViewController()
+        var items = [CellConfigurator]()
+        for _ in 0..<10 {
+            let buttonConf = Collection.Configurator<BottomButtonView>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            items.append(buttonConf)
+        }
+        vc.reactor = .init(items: items)
         goTo(vc: vc)
     }
 }

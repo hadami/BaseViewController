@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CellConfigurator: GenericCellIdentifier {
-    func rowHeight(availableWidth: CGFloat) -> CGFloat
+//    func rowHeight(availableWidth: CGFloat) -> CGFloat
     
     func configure(cell: UIView)
     func configure(cell: UIView, delegate: AnyObject?)
@@ -16,7 +16,9 @@ protocol CellConfigurator: GenericCellIdentifier {
 
 final class TableCellConfigurator<CellType: ConfigurableCell>: CellConfigurator where CellType: UITableViewCell {
     
+    static var viewType: CellType.ViewType.Type { return CellType.ViewType.self }
     static var cellType: CellType.Type { return CellType.self }
+    static var confType: TableCellConfigurator.Type { return TableCellConfigurator.self }
     static var reuseIdentifier: String { return CellType.reuseIdentifier }
     
     let item: CellType.ViewType.DataType
@@ -25,9 +27,9 @@ final class TableCellConfigurator<CellType: ConfigurableCell>: CellConfigurator 
         self.item = item
     }
     
-    func rowHeight(availableWidth: CGFloat) -> CGFloat {
-        return self.rowHeight(availableWidth: availableWidth, data: item)
-    }
+//    func rowHeight(availableWidth: CGFloat) -> CGFloat {
+//        return self.rowHeight(availableWidth: availableWidth, data: item)
+//    }
     
     func configure(cell: UIView) {
         configure(cell: cell, delegate: nil)
@@ -45,29 +47,31 @@ final class TableCellConfigurator<CellType: ConfigurableCell>: CellConfigurator 
     }
 }
 
-extension TableCellConfigurator {
-    func rowHeight(availableWidth: CGFloat, data: CellType.ViewType.DataType) -> CGFloat {
-        let cell = CellType.init()
-        cell.view.configure(data: data)
-        let availableSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
-        let size = cell.systemLayoutSizeFitting(availableSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-        return size.height
-    }
-}
-
-extension CollectionCellConfigurator {
-    func rowHeight(availableWidth: CGFloat, data: CellType.ViewType.DataType) -> CGFloat {
-        let cell = CellType.init()
-        cell.view.configure(data: data)
-        let availableSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
-        let size = cell.contentView.systemLayoutSizeFitting(availableSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-        return size.height
-    }
-}
+//extension TableCellConfigurator {
+//    func rowHeight(availableWidth: CGFloat, data: CellType.ViewType.DataType) -> CGFloat {
+//        let cell = CellType.init()
+//        cell.view.configure(data: data)
+//        let availableSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+//        let size = cell.systemLayoutSizeFitting(availableSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+//        return size.height
+//    }
+//}
+//
+//extension CollectionCellConfigurator {
+//    func rowHeight(availableWidth: CGFloat, data: CellType.ViewType.DataType) -> CGFloat {
+//        let cell = CellType.init()
+//        cell.view.configure(data: data)
+//        let availableSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+//        let size = cell.contentView.systemLayoutSizeFitting(availableSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+//        return size.height
+//    }
+//}
 
 final class CollectionCellConfigurator<CellType: ConfigurableCell>: CellConfigurator where CellType: UICollectionViewCell {
 
+    static var viewType: CellType.ViewType.Type { return CellType.ViewType.self }
     static var cellType: CellType.Type { return CellType.self }
+    static var confType: CollectionCellConfigurator.Type { return CollectionCellConfigurator.self }
     static var reuseIdentifier: String { return CellType.reuseIdentifier }
 
     let item: CellType.ViewType.DataType
@@ -76,9 +80,9 @@ final class CollectionCellConfigurator<CellType: ConfigurableCell>: CellConfigur
         self.item = item
     }
 
-    func rowHeight(availableWidth: CGFloat) -> CGFloat {
-        return self.rowHeight(availableWidth: availableWidth, data: item)
-    }
+//    func rowHeight(availableWidth: CGFloat) -> CGFloat {
+//        return self.rowHeight(availableWidth: availableWidth, data: item)
+//    }
 
     func configure(cell: UIView) {
         configure(cell: cell, delegate: nil)

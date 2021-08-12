@@ -140,7 +140,7 @@ class BottomButtonView: UIView, ReactorKit.View, ConfigurableContainerView {
         }
         
         confirmButton.snp.remakeConstraints {
-            $0.height.equalTo(height)
+            $0.height.equalTo(height).priority(.high)
             $0.edges.equalToSuperview().inset(insets)
         }
         confirmButton.isHidden = false

@@ -31,7 +31,6 @@ extension ConfigurableCell {
 
 class GenericTableViewCell<T: ConfigurableContainerView>: UITableViewCell, ConfigurableCell {
     typealias ViewType = T
-    
     let view: ViewType = ViewType()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -45,8 +44,7 @@ class GenericTableViewCell<T: ConfigurableContainerView>: UITableViewCell, Confi
     }
     
     private func setupView() {
-        let cv = contentView
-        cv.addSubview(view)
+        contentView.addSubview(view)
         view.snp.remakeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -55,8 +53,7 @@ class GenericTableViewCell<T: ConfigurableContainerView>: UITableViewCell, Confi
 
 class GenericCollectionViewCell<T: ConfigurableContainerView>: UICollectionViewCell, ConfigurableCell {
     typealias ViewType = T
-
-    private(set) lazy var view: ViewType = ViewType()
+    let view: ViewType = ViewType()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,9 +66,8 @@ class GenericCollectionViewCell<T: ConfigurableContainerView>: UICollectionViewC
     }
 
     private func setupView() {
-        let cv = contentView
-        cv.addSubview(view)
-        cv.snp.remakeConstraints {
+        contentView.addSubview(view)
+        view.snp.remakeConstraints {
             $0.edges.equalToSuperview()
         }
     }

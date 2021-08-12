@@ -19,7 +19,11 @@ class BaseViewController<T: UIView>: UIViewController {
     var disposeBag = DisposeBag()
     
     convenience init() {
-        self.init(view: ViewType())
+        if let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()) as? ViewType {
+            self.init(view: collectionView)
+        } else {
+            self.init(view: ViewType())
+        }
     }
     
     init(view: ViewType) {
