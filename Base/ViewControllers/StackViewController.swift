@@ -39,19 +39,19 @@ class StackViewController: BaseViewController<ScrollStackView> {
                      phoneTextField, telecomTextField, birthTextField, nameTextField]
         
         for _ in array {
-            let textField = SingleLineTextField()
+            let textField = FilledTextField()
             baseView.stackView.addArrangedSubview(textField)
-            textField.rx.textFieldChanged.subscribe(onNext: { textField in
-                print(textField)
-            }).disposed(by: disposeBag)
-            
-            textField.rx.textFieldFocusIn.subscribe(onNext: { textField in
-                print(textField)
-            }).disposed(by: disposeBag)
-            
-            textField.rx.textFieldFocusOut.subscribe(onNext: { textField in
-                print(textField)
-            }).disposed(by: disposeBag)
+//            textField.rx.textFieldChanged.subscribe(onNext: { textField in
+//                print(textField)
+//            }).disposed(by: disposeBag)
+//            
+//            textField.rx.textFieldFocusIn.subscribe(onNext: { textField in
+//                print(textField)
+//            }).disposed(by: disposeBag)
+//            
+//            textField.rx.textFieldFocusOut.subscribe(onNext: { textField in
+//                print(textField)
+//            }).disposed(by: disposeBag)
 
         }
         

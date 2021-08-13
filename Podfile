@@ -6,4 +6,6 @@ target 'Base' do
     pod 'RxSwift'
     pod 'RxCocoa'
     pod 'SnapKit'
+    pod 'MaterialComponents/TextControls+FilledTextAreas'
+    pod 'MaterialComponents/TextControls+FilledTextFields'
 end
