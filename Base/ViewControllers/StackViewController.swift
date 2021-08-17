@@ -30,8 +30,8 @@ class StackViewController: BaseViewController<ScrollStackView> {
         let telecomTextField = SingleLineTextField()
         let birthTextField = SingleLineTextField()
         let nameTextField = SingleLineTextField()
-//        let view = BottomButtonView()
-//        view.reactor = .init(type: .fixed(title: "확인", state: .primary))
+//        let view = DefaultButtonView()
+//        view.reactor = .init(type: .bottomFixed(title: "확인", state: .primary))
         
         let array = [phoneTextField, telecomTextField, birthTextField, nameTextField,
                      phoneTextField, telecomTextField, birthTextField, nameTextField,

@@ -11,12 +11,13 @@ protocol GenericCellList {
     var cellTypeList: [Cell.Type] { get set }
 }
 
-struct Table {
+struct GenericTable {
     typealias Cell<ViewType: ConfigurableContainerView> = GenericTableViewCell<ViewType>
-    typealias Configurator<ViewType: ConfigurableContainerView> = TableCellConfigurator<Table.Cell<ViewType>>
+    typealias Configurator<ViewType: ConfigurableContainerView> = TableCellConfigurator<GenericTable.Cell<ViewType>>
 }
 
-struct Collection {
+struct GenericCollection {
     typealias Cell<ViewType: ConfigurableContainerView> = GenericCollectionViewCell<ViewType>
-    typealias Configurator<ViewType: ConfigurableContainerView> = CollectionCellConfigurator<Collection.Cell<ViewType>>
+    typealias Configurator<ViewType: ConfigurableContainerView> = CollectionCellConfigurator<GenericCollection.Cell<ViewType>>
 }
+

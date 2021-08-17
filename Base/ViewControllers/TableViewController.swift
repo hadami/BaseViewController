@@ -10,41 +10,41 @@ import RxCocoa
 import RxSwift
 import UIKit
 
-protocol GenericTableView {
-    associatedtype CellType: ConfigurableCell where CellType: UITableViewCell
-    
-    var viewType: CellType.ViewType.Type { get }
-    var confType: TableCellConfigurator<CellType>.Type { get }
-    var cellType: CellType.Type { get }
-}
-
-protocol GenericTableViewType: GenericTableView { }
-extension GenericTableViewType {
-    var viewType: CellType.ViewType.Type {
-        return TableCellConfigurator<CellType>.viewType
-    }
-    var confType: TableCellConfigurator<CellType>.Type {
-        return TableCellConfigurator<CellType>.confType
-    }
-    var cellType: CellType.Type {
-        return TableCellConfigurator<CellType>.cellType
-    }
-}
-
-class GenericTableComponent<T: ConfigurableContainerView>: GenericTableViewType {
-    typealias ViewType = T
-    typealias CellType = GenericTableViewCell<T>
-    
-    init() {
-        let v = self.viewType
-        let t = self.confType
-        let c = self.cellType
-        print(t)
-        print(c)
-//        TableCellConfigurator<GenericTableViewCell<SingleLineTextField>>
-//        GenericTableViewCell<SingleLineTextField>
-    }
-}
+//protocol GenericTableView {
+//    associatedtype CellType: ConfigurableCell where CellType: UITableViewCell
+//
+//    var viewType: CellType.ViewType.Type { get }
+//    var confType: TableCellConfigurator<CellType>.Type { get }
+//    var cellType: CellType.Type { get }
+//}
+//
+//protocol GenericTableViewType: GenericTableView { }
+//extension GenericTableViewType {
+//    var viewType: CellType.ViewType.Type {
+//        return TableCellConfigurator<CellType>.viewType
+//    }
+//    var confType: TableCellConfigurator<CellType>.Type {
+//        return TableCellConfigurator<CellType>.confType
+//    }
+//    var cellType: CellType.Type {
+//        return TableCellConfigurator<CellType>.cellType
+//    }
+//}
+//
+//class GenericTableComponent<T: ConfigurableContainerView>: GenericTableViewType {
+//    typealias ViewType = T
+//    typealias CellType = GenericTableViewCell<T>
+//
+//    init() {
+//        let v = self.viewType
+//        let t = self.confType
+//        let c = self.cellType
+//        print(t)
+//        print(c)
+////        TableCellConfigurator<GenericTableViewCell<SingleLineTextField>>
+////        GenericTableViewCell<SingleLineTextField>
+//    }
+//}
 
 class TableViewReactor: Reactor {
     enum ActionType {
@@ -57,12 +57,12 @@ class TableViewReactor: Reactor {
     }
     
     struct State {
-        let items: [CellConfigurator]
+        let items: [GenericCellConfigurator]
     }
     
     let initialState: State
     
-    init(items: [CellConfigurator]) {
+    init(items: [GenericCellConfigurator]) {
         initialState = State(items: items)
     }
 }
@@ -78,7 +78,7 @@ class TableViewController: BaseViewController<UITableView>, ReactorKit.View, Gen
         }
     }
     
-    var itemArray = [CellConfigurator]() {
+    var itemArray = [GenericCellConfigurator]() {
         didSet {
             baseView.reloadData()
         }
@@ -95,8 +95,9 @@ class TableViewController: BaseViewController<UITableView>, ReactorKit.View, Gen
         baseView.dataSource = self
         
         cellTypeList = [
-            Table.Cell<SingleLineTextField>.self,
-            Table.Cell<BottomButtonView>.self
+            GenericTable.Cell<SingleLineTextField>.self,
+            GenericTable.Cell<BaseButton>.self,
+            GenericTable.Cell<ButtonStackView>.self
         ]
     }
     

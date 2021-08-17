@@ -21,12 +21,12 @@ class CollectionViewReactor: Reactor {
     }
     
     struct State {
-        let items: [CellConfigurator]
+        let items: [GenericCellConfigurator]
     }
     
     let initialState: State
     
-    init(items: [CellConfigurator]) {
+    init(items: [GenericCellConfigurator]) {
         initialState = State(items: items)
     }
 }
@@ -43,7 +43,7 @@ class CollectionViewController: BaseViewController<UICollectionView>, ReactorKit
         }
     }
     
-    var itemArray = [CellConfigurator]() {
+    var itemArray = [GenericCellConfigurator]() {
         // Section, Row, Type Check
         didSet {
             baseView.reloadData()
@@ -67,8 +67,8 @@ class CollectionViewController: BaseViewController<UICollectionView>, ReactorKit
         compositionalLayout()
         
         cellTypeList = [
-            Collection.Cell<SingleLineTextField>.self,
-            Collection.Cell<BottomButtonView>.self
+            GenericCollection.Cell<SingleLineTextField>.self,
+            GenericCollection.Cell<BaseButton>.self
         ]
     }
     
