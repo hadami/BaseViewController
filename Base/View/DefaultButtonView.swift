@@ -78,33 +78,13 @@ class BaseButtonReactor: Reactor {
     }
 }
 
-class BaseContainerView<R: ReactorKit.Reactor>: UIView, ReactorKit.View, ConfigurableContainerView {
-    
-    
-    typealias Reactor = R
-    typealias DataType = Reactor
-    
-    var disposeBag = DisposeBag()
-    
-    func configure(data: Reactor) {
-        
-    }
-    
-    func bind(reactor: R) {
-        
-    }
-}
-
-class BaseButton: UIView, ReactorKit.View, ConfigurableContainerView {
-    typealias DataType = BaseButtonReactor
+class BaseButton: GenericContainerView<BaseButtonReactor> {
     
     fileprivate var confirmButton: UIButton = {
         let v = UIButton.init(type: .system)
         v.layer.cornerRadius = 8
         return v
     }()
-    
-    var disposeBag = DisposeBag()
     
     convenience init() {
         self.init(frame: .zero)
@@ -126,11 +106,7 @@ class BaseButton: UIView, ReactorKit.View, ConfigurableContainerView {
         print("deinit - \(String(describing: type(of: self)))")
     }
     
-    func configure(data: DataType) {
-        bind(reactor: data)
-    }
-    
-    func bind(reactor: DataType) {
+    override func bind(reactor: Reactor) {
         var insets = reactor.currentState.insets
         let type = reactor.currentState.type
         

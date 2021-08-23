@@ -28,6 +28,20 @@ extension GenericContainerCell {
     }
 }
 
+class GenericContainerView<R: ReactorKit.Reactor>: UIView, ReactorKit.View, ConfigurableContainerView {
+    typealias Reactor = R
+    typealias DataType = R
+    
+    var disposeBag = DisposeBag()
+    
+    func configure(data: DataType) {
+        bind(reactor: data)
+    }
+    
+    func bind(reactor: Reactor) {
+    }
+}
+
 class GenericTableViewCell<T: ConfigurableContainerView>: UITableViewCell, GenericContainerCell {
     typealias ViewType = T
     let view: ViewType = ViewType()

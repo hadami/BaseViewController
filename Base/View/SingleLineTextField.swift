@@ -39,12 +39,8 @@ class SingleLineTextFieldReactor: Reactor {
     }
 }
 
-class SingleLineTextField: UIView, ReactorKit.View, ConfigurableContainerView {
-    typealias DataType = SingleLineTextFieldReactor
-    func configure(data: SingleLineTextFieldReactor) {
-        bind(reactor: data)
-    }
-    func bind(reactor: SingleLineTextFieldReactor) {
+class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
+    override func bind(reactor: Reactor) {
         setState(state: reactor.currentState.type)
     }
     
@@ -83,8 +79,6 @@ class SingleLineTextField: UIView, ReactorKit.View, ConfigurableContainerView {
         v.backgroundColor = .lightGray
         return v
     }()
-    
-    var disposeBag = DisposeBag()
     
     convenience init() {
         self.init(frame: .zero)

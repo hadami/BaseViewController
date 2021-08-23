@@ -35,9 +35,7 @@ class ButtonStackViewReactor: Reactor {
     }
 }
 
-class ButtonStackView: UIView, ConfigurableContainerView {
-    typealias DataType = ButtonStackViewReactor
-    
+class ButtonStackView: GenericContainerView<ButtonStackViewReactor> {
     fileprivate var confirmButton: BaseButton = {
         let v = BaseButton.init()
         return v
@@ -56,8 +54,6 @@ class ButtonStackView: UIView, ConfigurableContainerView {
         v.spacing = 8
         return v
     }()
-    
-    var disposeBag = DisposeBag()
     
     convenience init() {
         self.init(frame: .zero)
@@ -79,11 +75,7 @@ class ButtonStackView: UIView, ConfigurableContainerView {
         print("deinit - \(String(describing: type(of: self)))")
     }
     
-    func configure(data: DataType) {
-        bind(reactor: data)
-    }
-    
-    func bind(reactor: DataType) {
+    override func bind(reactor: Reactor) {
         // FIXME:
         let type = reactor.currentState.type
         let insets = reactor.currentState.insets
