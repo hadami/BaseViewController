@@ -1,5 +1,5 @@
 //
-//  BottomButtonView.swift
+//  BaseButton.swift
 //  Base
 //
 //  Created by chloe on 2021/08/09.
@@ -11,8 +11,8 @@ import RxSwift
 import SnapKit
 import UIKit
 
-enum BottomButtonStyle: Equatable {
-    case fixed(title: String = "확인", state: State)
+enum BaseButtonStyle: Equatable {
+    case bottomFixed(title: String = "확인", state: State)
     case scrollable(title: String = "확인", state: State, type: Height)
     
     enum Height: Int {
@@ -33,17 +33,28 @@ enum BottomButtonStyle: Equatable {
                 let color: UIColor
                 switch self {
                 case .blue:
-                    color = .blue
+                    color = .primaryBlue
                 case .gray:
-                    color = .darkGray
+                    color = .grayscale66
                 }
                 return color
             }
         }
     }
+    
+    var height: Int {
+        get {
+            switch self {
+            case .bottomFixed(_, _):
+                return 60
+            case .scrollable(_, _, let h):
+                return h.rawValue
+            }
+        }
+    }
 }
 
-class BottomButtonReactor: Reactor {
+class BaseButtonReactor: Reactor {
     enum ActionType {
     }
     
@@ -54,32 +65,26 @@ class BottomButtonReactor: Reactor {
     }
     
     struct State {
-        let type: BottomButtonStyle
+        let type: BaseButtonStyle
         let insets: UIEdgeInsets
     }
     
     let initialState: State
     
-    init(type: BottomButtonStyle,
+    init(type: BaseButtonStyle,
          insets: UIEdgeInsets? = nil) {
         initialState = State(type: type,
                              insets: insets ?? .init(top: 0, left: 20, bottom: 0, right: 20))
     }
 }
 
-class BottomButtonView: UIView, ReactorKit.View, ConfigurableContainerView {
-    typealias DataType = BottomButtonReactor
-    func configure(data: BottomButtonReactor) {
-        bind(reactor: data)
-    }
+class BaseButton: GenericContainerView<BaseButtonReactor> {
     
     fileprivate var confirmButton: UIButton = {
         let v = UIButton.init(type: .system)
         v.layer.cornerRadius = 8
         return v
     }()
-    
-    var disposeBag = DisposeBag()
     
     convenience init() {
         self.init(frame: .zero)
@@ -101,15 +106,15 @@ class BottomButtonView: UIView, ReactorKit.View, ConfigurableContainerView {
         print("deinit - \(String(describing: type(of: self)))")
     }
     
-    func bind(reactor: BottomButtonReactor) {
+    override func bind(reactor: Reactor) {
         var insets = reactor.currentState.insets
         let type = reactor.currentState.type
         
         var height = 0
-        let style: BottomButtonStyle.State
+        let style: BaseButtonStyle.State
         
         switch type {
-        case .fixed(let title, let state):
+        case .bottomFixed(let title, let state):
             var bottomInset: CGFloat = 24
             let window = UIApplication.shared.keyWindow
             if let bottomPadding = window?.safeAreaInsets.bottom, bottomPadding > 0 {
@@ -127,7 +132,7 @@ class BottomButtonView: UIView, ReactorKit.View, ConfigurableContainerView {
         
         switch style {
         case .primary:
-            confirmButton.backgroundColor = .blue
+            confirmButton.backgroundColor = .primaryBlue
             confirmButton.setTitleColor(.white, for: .normal)
         case .secondary(let colorType):
             confirmButton.backgroundColor = .white
@@ -135,8 +140,8 @@ class BottomButtonView: UIView, ReactorKit.View, ConfigurableContainerView {
             confirmButton.layer.borderColor = colorType.color.cgColor
             confirmButton.setTitleColor(colorType.color, for: .normal)
         case .disabled:
-            confirmButton.backgroundColor = .gray
-            confirmButton.setTitleColor(.gray, for: .normal)
+            confirmButton.backgroundColor = .grayscaleEE
+            confirmButton.setTitleColor(.grayscaleBB, for: .normal)
         }
         
         confirmButton.snp.remakeConstraints {
@@ -156,7 +161,7 @@ class BottomButtonView: UIView, ReactorKit.View, ConfigurableContainerView {
 
 }
 
-extension Reactive where Base: BottomButtonView {
+extension Reactive where Base: BaseButton {
     var buttonTap: ControlEvent<Void> {
         let source: Observable<Void> = self.base.confirmButton.rx.tap.asObservable()
       return ControlEvent(events: source)

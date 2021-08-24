@@ -6,30 +6,44 @@
 //
 
 import UIKit
+import ReactorKit
+import RxSwift
 
 protocol ConfigurableContainerView: UIView {
-//    associatedtype Delegate
     associatedtype DataType
-
-//    var delegate: Delegate? { get set }
     func configure(data: DataType)
 }
+
 protocol GenericCellIdentifier {
     static var reuseIdentifier: String { get }
 }
 
-protocol ConfigurableCell: GenericCellIdentifier {
+protocol GenericContainerCell: GenericCellIdentifier {
     associatedtype ViewType: ConfigurableContainerView
     
     var view: ViewType { get }
 }
-extension ConfigurableCell {
+extension GenericContainerCell {
     static var reuseIdentifier: String {
         return String(describing: ViewType.self)
     }
 }
 
-class GenericTableViewCell<T: ConfigurableContainerView>: UITableViewCell, ConfigurableCell {
+class GenericContainerView<R: ReactorKit.Reactor>: UIView, ReactorKit.View, ConfigurableContainerView {
+    typealias Reactor = R
+    typealias DataType = R
+    
+    var disposeBag = DisposeBag()
+    
+    func configure(data: DataType) {
+        reactor = data
+    }
+    
+    func bind(reactor: Reactor) {
+    }
+}
+
+class GenericTableViewCell<T: ConfigurableContainerView>: UITableViewCell, GenericContainerCell {
     typealias ViewType = T
     let view: ViewType = ViewType()
     
@@ -51,7 +65,7 @@ class GenericTableViewCell<T: ConfigurableContainerView>: UITableViewCell, Confi
     }
 }
 
-class GenericCollectionViewCell<T: ConfigurableContainerView>: UICollectionViewCell, ConfigurableCell {
+class GenericCollectionViewCell<T: ConfigurableContainerView>: UICollectionViewCell, GenericContainerCell {
     typealias ViewType = T
     let view: ViewType = ViewType()
 

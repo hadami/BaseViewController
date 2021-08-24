@@ -27,10 +27,14 @@ class ViewController: UIViewController {
     @IBAction func goToTable(_ sender: Any) {
         let vc = TableViewController()
         
-        var items = [CellConfigurator]()
+        var items = [GenericCellConfigurator]()
         for _ in 0..<10 {
-            let conf = Table.Configurator<SingleLineTextField>(item: .init(type: .done))
-            let buttonConf = Table.Configurator<BottomButtonView>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            let empty = Component.Table.Configurator<EmptyView>(item: .init(height: 50))
+            let label = Component.Table.Configurator<SingleLabel>(item: .init(title: .init(title: NSAttributedString(string: "SingleLabel"))))
+            let conf = Component.Table.Configurator<SingleLineTextField>(item: .init(type: .done))
+            let buttonConf = Component.Table.Configurator<BaseButton>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            items.append(label)
+            items.append(empty)
             items.append(conf)
             items.append(buttonConf)
         }
@@ -40,9 +44,9 @@ class ViewController: UIViewController {
     
     @IBAction func goToCollection(_ sender: Any) {
         let vc = CollectionViewController()
-        var items = [CellConfigurator]()
+        var items = [GenericCellConfigurator]()
         for _ in 0..<10 {
-            let buttonConf = Collection.Configurator<BottomButtonView>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            let buttonConf = Component.Collection.Configurator<BaseButton>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
             items.append(buttonConf)
         }
         vc.reactor = .init(items: items)
