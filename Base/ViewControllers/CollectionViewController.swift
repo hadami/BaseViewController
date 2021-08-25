@@ -67,8 +67,8 @@ class CollectionViewController: BaseViewController<UICollectionView>, ReactorKit
         compositionalLayout()
         
         cellTypeList = [
-            GenericCollection.Cell<SingleLineTextField>.self,
-            GenericCollection.Cell<BaseButton>.self
+            Component.Collection.Cell<SingleLineTextField>.self,
+            Component.Collection.Cell<BaseButton>.self
         ]
     }
     

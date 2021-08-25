@@ -95,9 +95,10 @@ class TableViewController: BaseViewController<UITableView>, ReactorKit.View, Gen
         baseView.dataSource = self
         
         cellTypeList = [
-            GenericTable.Cell<SingleLineTextField>.self,
-            GenericTable.Cell<BaseButton>.self,
-            GenericTable.Cell<ButtonStackView>.self
+            Component.Table.Cell<SingleLineTextField>.self,
+            Component.Table.Cell<BaseButton>.self,
+            Component.Table.Cell<EmptyView>.self,
+            Component.Table.Cell<SingleLabel>.self
         ]
     }
     

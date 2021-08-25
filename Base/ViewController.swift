@@ -29,12 +29,13 @@ class ViewController: UIViewController {
         
         var items = [GenericCellConfigurator]()
         for _ in 0..<10 {
-            let conf = GenericTable.Configurator<SingleLineTextField>(item: .init(type: .done))
-            let buttonConf = GenericTable.Configurator<BaseButton>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
-            let stackConf = GenericTable.Configurator<ButtonStackView>(item: .init(type: (.scrollable(title: "취소", state: .secondary(color: .gray), type: .H52),
-                                                                                   .scrollable(title: "확인", state: .primary, type: .H52))))
+            let empty = Component.Table.Configurator<EmptyView>(item: .init(height: 50))
+            let label = Component.Table.Configurator<SingleLabel>(item: .init(title: .init(title: NSAttributedString(string: "SingleLabel"))))
+            let conf = Component.Table.Configurator<SingleLineTextField>(item: .init(type: .done))
+            let buttonConf = Component.Table.Configurator<BaseButton>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            items.append(label)
+            items.append(empty)
             items.append(conf)
-            items.append(stackConf)
         }
         vc.reactor = .init(items: items)
         goTo(vc: vc)
@@ -44,7 +45,7 @@ class ViewController: UIViewController {
         let vc = CollectionViewController()
         var items = [GenericCellConfigurator]()
         for _ in 0..<10 {
-            let buttonConf = GenericCollection.Configurator<BaseButton>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
+            let buttonConf = Component.Collection.Configurator<BaseButton>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
             items.append(buttonConf)
         }
         vc.reactor = .init(items: items)

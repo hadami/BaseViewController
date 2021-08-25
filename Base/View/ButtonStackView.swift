@@ -22,26 +22,29 @@ class ButtonStackViewReactor: Reactor {
     }
     
     struct State {
-        let type: (BaseButtonStyle, BaseButtonStyle)
+        let leftType: BaseButtonStyle
+        let rightType: BaseButtonStyle
         let insets: UIEdgeInsets
     }
     
     let initialState: State
     
-    init(type: (BaseButtonStyle, BaseButtonStyle),
+    init(leftType: BaseButtonStyle,
+         rightType: BaseButtonStyle,
          insets: UIEdgeInsets? = nil) {
-        initialState = State(type: type,
+        initialState = State(leftType: leftType,
+                             rightType: rightType,
                              insets: insets ?? .init(top: 0, left: 20, bottom: 0, right: 20))
     }
 }
 
 class ButtonStackView: GenericContainerView<ButtonStackViewReactor> {
-    fileprivate var confirmButton: BaseButton = {
+    fileprivate var leftButton: BaseButton = {
         let v = BaseButton.init()
         return v
     }()
     
-    fileprivate var cancelButton: BaseButton = {
+    fileprivate var rightButton: BaseButton = {
         let v = BaseButton.init()
         return v
     }()
@@ -54,6 +57,13 @@ class ButtonStackView: GenericContainerView<ButtonStackViewReactor> {
         v.spacing = 8
         return v
     }()
+    
+    private var isHiddenButtons: Bool = true {
+        didSet {
+            leftButton.isHidden = isHiddenButtons
+            rightButton.isHidden = isHiddenButtons
+        }
+    }
     
     convenience init() {
         self.init(frame: .zero)
@@ -77,27 +87,26 @@ class ButtonStackView: GenericContainerView<ButtonStackViewReactor> {
     
     override func bind(reactor: Reactor) {
         // FIXME:
-        let type = reactor.currentState.type
+        isHiddenButtons = false
+        
+        let leftType = reactor.currentState.leftType
+        let rightType = reactor.currentState.rightType
         let insets = reactor.currentState.insets
-        cancelButton.reactor = .init(type: type.0,
+        leftButton.reactor = .init(type: leftType,
                                      insets: .zero)
-        confirmButton.reactor = .init(type: type.1,
+        rightButton.reactor = .init(type: rightType,
                                      insets: .zero)
-        cancelButton.isHidden = false
-        confirmButton.isHidden = false
         
         stackView.snp.remakeConstraints {
-            $0.height.equalTo(type.0.height).priority(.high)
+            $0.height.equalTo(rightType.height).priority(.high)
             $0.edges.equalToSuperview().inset(insets)
         }
     }
     
     private func setupUI() {
         addSubview(stackView)
-        stackView.addArrangedSubview(cancelButton)
-        stackView.addArrangedSubview(confirmButton)
-        cancelButton.isHidden = true
-        confirmButton.isHidden = true
+        stackView.addArrangedSubview(leftButton)
+        stackView.addArrangedSubview(rightButton)
     }
     
     private func setupRx() {
@@ -105,12 +114,12 @@ class ButtonStackView: GenericContainerView<ButtonStackViewReactor> {
 }
 
 extension Reactive where Base: ButtonStackView {
-    var confirmButtonTap: ControlEvent<Void> {
-        let source: Observable<Void> = self.base.confirmButton.rx.buttonTap.asObservable()
+    var rightButtonTap: ControlEvent<Void> {
+        let source: Observable<Void> = self.base.rightButton.rx.buttonTap.asObservable()
       return ControlEvent(events: source)
     }
-    var cancelButtonTap: ControlEvent<Void> {
-        let source: Observable<Void> = self.base.cancelButton.rx.buttonTap.asObservable()
+    var leftButtonTap: ControlEvent<Void> {
+        let source: Observable<Void> = self.base.leftButton.rx.buttonTap.asObservable()
       return ControlEvent(events: source)
     }
 }

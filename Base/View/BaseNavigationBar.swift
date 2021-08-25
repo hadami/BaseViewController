@@ -26,14 +26,12 @@ class BaseNavigationBar: UIView {
     }()
     fileprivate var moreButton: UIButton = {
         let v = UIButton.init(type: .system)
-        v.tintColor = UIColor(displayP3Red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         v.setImage(#imageLiteral(resourceName: "more"), for: .normal)
         return v
     }()
     fileprivate var closeButton: UIButton = {
         let v = UIButton.init(type: .system)
         v.setImage(#imageLiteral(resourceName: "close"), for: .normal)
-        v.tintColor = UIColor(displayP3Red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         return v
     }()
     

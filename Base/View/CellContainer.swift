@@ -7,8 +7,9 @@
 
 import UIKit
 import ReactorKit
+import RxSwift
 
-protocol ConfigurableContainerView: UIView, ReactorKit.View {
+protocol ConfigurableContainerView: UIView {
     associatedtype DataType
     func configure(data: DataType)
 }
@@ -35,7 +36,7 @@ class GenericContainerView<R: ReactorKit.Reactor>: UIView, ReactorKit.View, Conf
     var disposeBag = DisposeBag()
     
     func configure(data: DataType) {
-        bind(reactor: data)
+        reactor = data
     }
     
     func bind(reactor: Reactor) {

@@ -6,9 +6,18 @@
 //
 
 import UIKit
+import ReactorKit
 
 protocol GenericCellConfigurator: GenericCellIdentifier {
     func configure(cell: UIView)
+}
+
+final class ViewConfigurator<ViewType: ConfigurableContainerView> where ViewType: ReactorKit.View {
+    let view = ViewType()
+    
+    init(item: ViewType.Reactor) {
+        view.reactor = item
+    }
 }
 
 final class TableCellConfigurator<CellType: GenericContainerCell>: GenericCellConfigurator where CellType: UITableViewCell {

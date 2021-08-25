@@ -26,6 +26,7 @@ class StackViewController: BaseViewController<ScrollStackView> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let label = ViewConfigurator<SingleLabel, SingleLabelReactor>.init(item: .init(title: .init(title: <#T##NSAttributedString#>)))
         let phoneTextField = SingleLineTextField()
         let telecomTextField = SingleLineTextField()
         let birthTextField = SingleLineTextField()
@@ -39,19 +40,24 @@ class StackViewController: BaseViewController<ScrollStackView> {
                      phoneTextField, telecomTextField, birthTextField, nameTextField]
         
         for _ in array {
-            let textField = SingleLineTextField()
-            baseView.stackView.addArrangedSubview(textField)
-            textField.rx.textFieldChanged.subscribe(onNext: { textField in
-                print(textField)
-            }).disposed(by: disposeBag)
-            
-            textField.rx.textFieldFocusIn.subscribe(onNext: { textField in
-                print(textField)
-            }).disposed(by: disposeBag)
-            
-            textField.rx.textFieldFocusOut.subscribe(onNext: { textField in
-                print(textField)
-            }).disposed(by: disposeBag)
+            let attr = NSAttributedString(string: "휴대폰 번호를\n입력해주세요")
+            var textField =
+//                Component.Configurator<SingleLabel.Reactor>(item: .init(title: .init(title: attr)))
+                ViewConfigurator<SingleLabel>(item: .init(title: .init(title: attr)))
+
+//SingleLineTextField()
+            baseView.stackView.addArrangedSubview(textField.view)
+//            textField.rx.textFieldChanged.subscribe(onNext: { textField in
+//                print(textField)
+//            }).disposed(by: disposeBag)
+//
+//            textField.rx.textFieldFocusIn.subscribe(onNext: { textField in
+//                print(textField)
+//            }).disposed(by: disposeBag)
+//
+//            textField.rx.textFieldFocusOut.subscribe(onNext: { textField in
+//                print(textField)
+//            }).disposed(by: disposeBag)
 
         }
         
