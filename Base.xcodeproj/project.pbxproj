@@ -45,6 +45,8 @@
 		89B296FF26D8B0DB002D232E /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B296FA26D8ADBA002D232E /* View.swift */; };
 		89B2970126D8B1B7002D232E /* InterimSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B296FC26D8ADD0002D232E /* InterimSpace.swift */; };
 		89B2970226D8B230002D232E /* PulseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B296D826D8AB29002D232E /* PulseAnimation.swift */; };
+		89B2970426D8B30E002D232E /* MeterialTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B2970326D8B30E002D232E /* MeterialTextField.swift */; };
+		89B2970626D8C466002D232E /* UIFont+Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B2970526D8C466002D232E /* UIFont+Component.swift */; };
 		89B31E4026BD0A1D0082C3CF /* CellContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */; };
 		89B3D6C326CA99BD00563457 /* CellComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B3D6C226CA99BD00563457 /* CellComponent.swift */; };
 		89C6DBE926D4C0740025E312 /* SingleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6DBE726D4C0740025E312 /* SingleLabel.swift */; };
@@ -100,6 +102,8 @@
 		89B296F826D8AD7A002D232E /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		89B296FA26D8ADBA002D232E /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		89B296FC26D8ADD0002D232E /* InterimSpace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterimSpace.swift; sourceTree = "<group>"; };
+		89B2970326D8B30E002D232E /* MeterialTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeterialTextField.swift; sourceTree = "<group>"; };
+		89B2970526D8C466002D232E /* UIFont+Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Component.swift"; sourceTree = "<group>"; };
 		89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellContainer.swift; sourceTree = "<group>"; };
 		89B3D6C226CA99BD00563457 /* CellComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellComponent.swift; sourceTree = "<group>"; };
 		89C6DBE726D4C0740025E312 /* SingleLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleLabel.swift; sourceTree = "<group>"; };
@@ -171,6 +175,7 @@
 				89953F8126BA7C5100C28C86 /* AppDelegate.swift */,
 				89953F8526BA7C5100C28C86 /* ViewController.swift */,
 				89C6DBF126D4C4000025E312 /* UIColor+Component.swift */,
+				89B2970526D8C466002D232E /* UIFont+Component.swift */,
 				89953F8726BA7C5100C28C86 /* Main.storyboard */,
 				89C6DBEF26D4C3D70025E312 /* Colors.xcassets */,
 				89953F8A26BA7C5300C28C86 /* Assets.xcassets */,
@@ -230,6 +235,7 @@
 				89B3D6C226CA99BD00563457 /* CellComponent.swift */,
 				89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */,
 				897EFF6826BBDFAE006AF830 /* CellConfigurator.swift */,
+				89B2970326D8B30E002D232E /* MeterialTextField.swift */,
 				89D9D86E26BAADAD00737E3A /* SingleLineTextField.swift */,
 				89953FF226BA840200C28C86 /* BaseNavigationBar.swift */,
 				89D9D87526BAD22C00737E3A /* ScrollStackView.swift */,
@@ -381,6 +387,7 @@
 				89953F8626BA7C5100C28C86 /* ViewController.swift in Sources */,
 				89B296E926D8ABFA002D232E /* Offset.swift in Sources */,
 				89B296C926D8A375002D232E /* Theme.swift in Sources */,
+				89B2970426D8B30E002D232E /* MeterialTextField.swift in Sources */,
 				89C6DBE926D4C0740025E312 /* SingleLabel.swift in Sources */,
 				89D9D85026BAA30E00737E3A /* TableViewController.swift in Sources */,
 				89B296C526D8A150002D232E /* ErrorTextField.swift in Sources */,
@@ -393,6 +400,7 @@
 				89D9D85426BAA31E00737E3A /* CollectionViewController.swift in Sources */,
 				89953F9A26BA7E9E00C28C86 /* BaseViewController.swift in Sources */,
 				89B296EF26D8ACA1002D232E /* Application.swift in Sources */,
+				89B2970626D8C466002D232E /* UIFont+Component.swift in Sources */,
 				89B296E526D8ABC6002D232E /* CornerRadius.swift in Sources */,
 				89953FF326BA840200C28C86 /* BaseNavigationBar.swift in Sources */,
 				89B296E326D8ABB8002D232E /* Depth.swift in Sources */,

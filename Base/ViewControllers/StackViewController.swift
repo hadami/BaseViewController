@@ -39,6 +39,9 @@ class StackViewController: BaseViewController<ScrollStackView> {
                      phoneTextField, telecomTextField, birthTextField, nameTextField,
                      phoneTextField, telecomTextField, birthTextField, nameTextField]
         
+        let v = ViewConfigurator<MeterialTextField>(item: .init())
+        baseView.stackView.addArrangedSubview(v.view)
+        
         for _ in array {
             let attr = NSAttributedString(string: "휴대폰 번호를\n입력해주세요")
             var textField =
@@ -46,7 +49,7 @@ class StackViewController: BaseViewController<ScrollStackView> {
                 ViewConfigurator<SingleLabel>(item: .init(title: .init(title: attr)))
 
 //SingleLineTextField()
-            baseView.stackView.addArrangedSubview(textField.view)
+//            baseView.stackView.addArrangedSubview(textField.view)
 //            textField.rx.textFieldChanged.subscribe(onNext: { textField in
 //                print(textField)
 //            }).disposed(by: disposeBag)

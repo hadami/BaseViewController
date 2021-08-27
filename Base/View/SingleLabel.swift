@@ -59,21 +59,21 @@ final class SingleLabelReactor: Reactor {
 
 final class SingleLabel: GenericContainerView<SingleLabelReactor> {
     lazy var prefixLabel: UILabel = {
-        let label = UILabel(frame: .zero)
-        label.numberOfLines = 0
-        return label
+        let v = UILabel(frame: .zero)
+        v.numberOfLines = 0
+        return v
     }()
 
-    lazy var titleLabel: UILabel = {
-        let label = UILabel(frame: .zero)
-        label.numberOfLines = 0
-        label.clipsToBounds = false
-        return label
+    fileprivate var titleLabel: UILabel = {
+        let v = UILabel(frame: .zero)
+        v.numberOfLines = 0
+        v.clipsToBounds = false
+        return v
     }()
 
     lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        return imageView
+        let v = UIImageView()
+        return v
     }()
     
     convenience init() {
