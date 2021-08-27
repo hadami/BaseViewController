@@ -6,4 +6,5 @@ target 'Base' do
     pod 'RxSwift'
     pod 'RxCocoa'
     pod 'SnapKit'
+    pod 'Motion'
 end
