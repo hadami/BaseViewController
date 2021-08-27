@@ -44,39 +44,50 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         setState(state: reactor.currentState.type)
     }
     
+    let borderWidth: CGFloat = 1
+    let highlightedBorderWidth: CGFloat = 2
+    let normalBorderColor: UIColor = .grayscaleDD
+    let highlightedBorderColor: UIColor = .textBlueColor
+    let errorColor: UIColor = .textRed
+    let normalTextColor: UIColor = .text66
+    let highlightedTextColor: UIColor = .text07
+    let disabledTextColor: UIColor = .textBB
+    
+    let textFieldFont: UIFont = ComponentFont.font(weight: .regular, size: .px18)
+    let errorFont: UIFont = ComponentFont.font(weight: .regular, size: .px12)
+    
     var textField: UITextField = {
         let v = UITextField()
-        v.font = .systemFont(ofSize: 18)
-        v.tintColor = .black
-        v.textColor = .black
+//        v.font = ComponentFont.font(weight: .regular, size: .px18)
+//        v.tintColor = .black
+        v.textColor = .text07
+        
         v.borderStyle = .none
         return v
     }()
     
-    fileprivate var deleteButton: UIButton = {
+    fileprivate var clearButton: UIButton = {
         let v = UIButton.init(type: .system)
-        v.setTitle("x", for: .normal)
+        v.setImage(#imageLiteral(resourceName: "eraseAll"), for: .normal)
         return v
     }()
     
     fileprivate var placeholderLabel: UILabel = {
         let v = UILabel()
-        v.text = "placeholder"
-        v.font = .systemFont(ofSize: 12)
-        v.textColor = .gray
+        v.text = "라벨"
+//        v.font = ComponentFont.font(weight: .regular, size: .px18)
+//        v.textColor = .text66
         return v
     }()
     
-    fileprivate var helperLabel: UILabel = {
+    fileprivate var errorLabel: UILabel = {
         let v = UILabel()
-        v.font = .systemFont(ofSize: 12)
-        v.textColor = .red
         return v
     }()
     
-    fileprivate var lineView: UIView = {
+    fileprivate var borderView: UIView = {
         let v = UIView()
-        v.backgroundColor = .lightGray
+//        v.backgroundColor = .lightGray
         return v
     }()
     
@@ -101,11 +112,15 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
     }
     
     private func setupUI() {
+        textField.font = textFieldFont
+        placeholderLabel.font = textFieldFont
+        errorLabel.font = errorFont
+        
         addSubview(textField)
-        addSubview(deleteButton)
+        addSubview(clearButton)
         addSubview(placeholderLabel)
-        addSubview(helperLabel)
-        addSubview(lineView)
+        addSubview(errorLabel)
+        addSubview(borderView)
         
         placeholderLabel.snp.remakeConstraints {
             $0.top.equalToSuperview().inset(10)
@@ -113,6 +128,7 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
             $0.height.equalTo(18)
         }
         
+        // TODO: clearButton 처리
         textField.snp.remakeConstraints {
             $0.left.equalToSuperview()
             $0.right.equalToSuperview().inset(39)
@@ -120,25 +136,25 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
             $0.bottom.equalToSuperview().inset(30)
         }
         
-        deleteButton.snp.remakeConstraints {
+        clearButton.snp.remakeConstraints {
             $0.right.equalToSuperview()
             $0.centerY.equalToSuperview().offset(2)
         }
         
-        lineView.snp.remakeConstraints {
+        borderView.snp.remakeConstraints {
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview().inset(20)
             $0.height.equalTo(1)
         }
         
-        helperLabel.snp.remakeConstraints {
+        errorLabel.snp.remakeConstraints {
             $0.left.bottom.equalToSuperview()
-            $0.height.equalTo(18)
+//            $0.height.equalTo(18)
         }
     }
     
     private func setupRx() {
-        deleteButton.rx.tap.subscribe({ [weak self] _ in
+        clearButton.rx.tap.subscribe({ [weak self] _ in
             guard let self = self else { return }
             self.textField.text = ""
         }).disposed(by: disposeBag)
@@ -155,29 +171,36 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
     }
     
     private func setState(state: TextFieldState) {
+        var isError = false
+        
         switch state {
         case .editing:
-            let color = UIColor.blue
-            self.placeholderLabel.textColor = .gray
-            self.lineView.backgroundColor = color
-            self.helperLabel.text = ""
+            placeholderLabel.textColor = normalTextColor
+            borderView.backgroundColor = highlightedBorderColor
         case .error(let title):
-            let color = UIColor.red
-            self.placeholderLabel.textColor = color
-            self.lineView.backgroundColor = color
-            self.helperLabel.text = title
+            let color = errorColor
+            placeholderLabel.textColor = color
+            borderView.backgroundColor = color
+            errorLabel.textColor = color
+            errorLabel.text = title
+            isError = true
         case .done:
-            self.placeholderLabel.textColor = .gray
-            self.lineView.backgroundColor = .gray
-            self.helperLabel.text = ""
+            placeholderLabel.textColor = normalTextColor
+            borderView.backgroundColor = borderColor
         case .disabled:
-            let color = UIColor.lightGray
-            self.placeholderLabel.textColor = color
-            self.textField.textColor = color
-            self.lineView.backgroundColor = color
-            self.helperLabel.text = ""
+            let color = disabledTextColor
+            placeholderLabel.textColor = color
+            textField.textColor = color
+            borderView.backgroundColor = borderColor
         }
-        deleteButton.isHidden = (state == .editing) ? false : true
+        errorLabel.isHidden = !isError
+        clearButton.isHidden = state != .editing
+        textField.isEnabled = state != .disabled
+        
+        UIView.animate(withDuration: 10) { [weak self] in
+            guard let self = self else { return }
+            self.layoutIfNeeded()
+        }
     }
 
 }

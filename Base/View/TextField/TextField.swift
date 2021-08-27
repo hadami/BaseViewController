@@ -24,6 +24,7 @@
  */
 
 import UIKit
+import SnapKit
 
 @objc(TextFieldPlaceholderAnimation)
 public enum TextFieldPlaceholderAnimation: Int {
@@ -61,7 +62,7 @@ public protocol TextFieldDelegate: UITextFieldDelegate {
 open class TextField: UITextField, Themeable {
   
   /// Minimum TextField text height.
-  private let minimumTextHeight: CGFloat = 32
+  private let minimumTextHeight: CGFloat = 24
   
   /// Default size when using AutoLayout.
   open override var intrinsicContentSize: CGSize {
@@ -254,7 +255,7 @@ open class TextField: UITextField, Themeable {
   
   /// Vertical distance for the detailLabel from the divider.
   @IBInspectable
-  open var detailVerticalOffset: CGFloat = 8 {
+  open var detailVerticalOffset: CGFloat = 2 {
     didSet {
       layoutSubviews()
     }
@@ -425,7 +426,7 @@ open class TextField: UITextField, Themeable {
   
   /// EdgeInsets for text.
   @objc
-  open var textInsets: EdgeInsets = .zero
+  open var textInsets: UIEdgeInsets = .init(top: 32, left: 0, bottom: 30, right: 0)
   
   /// EdgeInsets preset property for text.
   open var textInsetsPreset = EdgeInsetsPreset.none {
@@ -449,12 +450,16 @@ open class TextField: UITextField, Themeable {
    The super.prepare method should always be called immediately
    when subclassing.
    */
+    
+      
+      var contentView: UIView = UIView()
   open func prepare() {
+    contentView = subviews.first ?? UIView()
     clipsToBounds = false
     borderStyle = .none
     backgroundColor = nil
     contentScaleFactor = Screen.scale
-    font = Theme.font.regular(with: 16)
+    font = ComponentFont.font(weight: .regular, size: .px18)//Theme.font.regular(with: 16)
     textColor = Color.darkText.primary
     
     prepareDivider()
@@ -500,7 +505,7 @@ fileprivate extension TextField {
   
   /// Prepares the detailLabel.
   func prepareDetailLabel() {
-    detailLabel.font = Theme.font.regular(with: 12)
+    detailLabel.font = ComponentFont.font(weight: .regular, size: .px12)//Theme.font.regular(with: 12)
     detailLabel.numberOfLines = 0
     detailColor = Color.darkText.others
     addSubview(detailLabel)
@@ -562,6 +567,7 @@ fileprivate extension TextField {
   
   /// Updates the dividerThickness.
   func updateDividerHeight() {
+//    dividerContentEdgeInsets = .init(top: 0, left: 0, bottom: isEditing ? -8 : -9, right: 0)
     dividerThickness = isEditing ? dividerActiveHeight : dividerNormalHeight
   }
   
@@ -605,26 +611,39 @@ fileprivate extension TextField {
     var h = placeholderLabel.sizeThatFits(CGSize(width: w, height: .greatestFiniteMagnitude)).height
     h = min(h, bounds.height - textInsets.top - textInsets.bottom)
     h = max(h, minimumTextHeight)
-    
+
     placeholderLabel.bounds.size = CGSize(width: w, height: h)
     
     guard isEditing || !isEmpty || !isPlaceholderAnimated else {
       placeholderLabel.transform = CGAffineTransform.identity
-      placeholderLabel.frame.origin = CGPoint(x: leftPadding, y: textInsets.top)
+      placeholderLabel.frame.origin = CGPoint(x: 0, y: 26)//textInsets.top)
+        
+//        placeholderLabel.snp.remakeConstraints {
+//            $0.left.equalToSuperview()
+//            $0.centerY.equalTo(contentView.snp.centerY).offset(-6)
+//        }
       return
     }
     
-    placeholderLabel.transform = CGAffineTransform(scaleX: placeholderActiveScale, y: placeholderActiveScale)
-    placeholderLabel.frame.origin.y = -placeholderLabel.frame.height + placeholderVerticalOffset
+        let scale = CGAffineTransform(scaleX: placeholderActiveScale, y: placeholderActiveScale)
+//    let move = CGAffineTransform(translationX: 0, y: 10)
     
+    placeholderLabel.transform = scale//.concatenating(move)
+    placeholderLabel.frame.origin.y = 10//-placeholderLabel.frame.height + placeholderVerticalOffset
+
     switch placeholderLabel.textAlignment {
     case .left, .natural:
-      placeholderLabel.frame.origin.x = leftPadding + placeholderHorizontalOffset
+      placeholderLabel.frame.origin.x = 0//leftPadding + placeholderHorizontalOffset
     case .right:
       let scaledWidth = w * placeholderActiveScale
       placeholderLabel.frame.origin.x = bounds.width - scaledWidth - textInsets.right + placeholderHorizontalOffset
     default:break
     }
+    
+//    placeholderLabel.snp.remakeConstraints {
+//        $0.left.equalToSuperview()
+//        $0.bottom.equalTo(contentView.snp.top).offset(-4)
+//    }
   }
   
   /// Layout the leftView.
@@ -653,10 +672,23 @@ internal extension TextField {
   /// Layout given label at the bottom with the vertical offset provided.
   func layoutBottomLabel(label: UILabel, verticalOffset: CGFloat) {
     let c = dividerContentEdgeInsets
-    label.frame.origin.x = c.left
-    label.frame.origin.y = bounds.height + verticalOffset
-    label.frame.size.width = bounds.width - c.left - c.right
-    label.frame.size.height = label.sizeThatFits(CGSize(width: label.bounds.width, height: .greatestFiniteMagnitude)).height
+//    label.frame.origin.x = c.left
+//    label.frame.origin.y = bounds.height + verticalOffset
+//    label.frame.size.width = bounds.width - c.left - c.right
+//    label.frame.size.height = label.sizeThatFits(CGSize(width: label.bounds.width, height: .greatestFiniteMagnitude)).height
+    
+    
+    let w = bounds.width - c.left - c.right
+    let h = label.sizeThatFits(CGSize(width: w, height: .greatestFiniteMagnitude)).height
+    
+    label.snp.remakeConstraints {
+//        $0.top.equalTo(contentView.snp.bottom).inset(-verticalOffset)
+        $0.bottom.equalToSuperview()
+        $0.left.equalToSuperview().inset(c.left)
+//        $0.height.equalTo(h)
+    }
+    
+//    label.frame.origin.y + label.frame.size.height
   }
 }
 

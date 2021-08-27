@@ -39,7 +39,7 @@ class StackViewController: BaseViewController<ScrollStackView> {
                      phoneTextField, telecomTextField, birthTextField, nameTextField,
                      phoneTextField, telecomTextField, birthTextField, nameTextField]
         
-        let v = ViewConfigurator<MeterialTextField>(item: .init())
+//        let v = ViewConfigurator<MeterialTextField>(item: .init())
         baseView.stackView.addArrangedSubview(v.view)
         
         for _ in array {
@@ -69,6 +69,17 @@ class StackViewController: BaseViewController<ScrollStackView> {
 //                $0.height.equalTo(86)
 //            }
 //        }
+        navigationView.rx.moreButtonTap.subscribe({ [weak self] _ in
+            guard let self = self else { return }
+            self.handleResignResponderButton()
+        }).disposed(by: disposeBag)
+
+        
+    }
+    var v = ViewConfigurator<SingleLineTextField>(item: .init(type: .done))
+    
+    func handleResignResponderButton() {
+        v.view.textField.resignFirstResponder()
     }
 
 }

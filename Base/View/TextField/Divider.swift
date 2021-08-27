@@ -56,7 +56,7 @@ public struct Divider {
   }
   
   /// A reference to EdgeInsets.
-  public var contentEdgeInsets = EdgeInsets.zero {
+    public var contentEdgeInsets = UIEdgeInsets.zero {
     didSet {
       reload()
     }
@@ -121,7 +121,7 @@ public struct Divider {
     case .top:
       l.frame = CGRect(x: c.left, y: c.top, width: v.bounds.width - c.left - c.right, height: thickness)
     case .bottom:
-      l.frame = CGRect(x: c.left, y: v.bounds.height - thickness - c.bottom, width: v.bounds.width - c.left - c.right, height: thickness)
+      l.frame = CGRect(x: c.left, y: 66 - thickness/*v.bounds.height - thickness - c.bottom*/, width: v.bounds.width - c.left - c.right, height: thickness)
     case .left:
       l.frame = CGRect(x: c.left, y: c.top, width: thickness, height: v.bounds.height - c.top - c.bottom)
     case .right:
@@ -133,16 +133,16 @@ public struct Divider {
 /// A memory reference to the Divider instance.
 fileprivate var DividerKey: UInt8 = 0
 
-extension UIView {
+extension TextField {
   /// TabBarItem reference.
   public private(set) var divider: Divider {
     get {
-      return AssociatedObject.get(base: self, key: &DividerKey) {
-        return Divider(view: self)
+        return AssociatedObject.get(base: self, key: &DividerKey) {
+            return Divider(view: self)
       }
     }
     set(value) {
-      AssociatedObject.set(base: self, key: &DividerKey, value: value)
+        AssociatedObject.set(base: self, key: &DividerKey, value: value)
     }
   }
   
