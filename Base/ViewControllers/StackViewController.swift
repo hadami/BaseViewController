@@ -27,27 +27,27 @@ class StackViewController: BaseViewController<ScrollStackView> {
         super.viewDidLoad()
         
 //        let label = ViewConfigurator<SingleLabel, SingleLabelReactor>.init(item: .init(title: .init(title: <#T##NSAttributedString#>)))
-        let phoneTextField = SingleLineTextField()
-        let telecomTextField = SingleLineTextField()
-        let birthTextField = SingleLineTextField()
-        let nameTextField = SingleLineTextField()
+//        let phoneTextField = SingleLineTextField()
+//        let telecomTextField = SingleLineTextField()
+//        let birthTextField = SingleLineTextField()
+//        let nameTextField = SingleLineTextField()
 //        let view = DefaultButtonView()
 //        view.reactor = .init(type: .bottomFixed(title: "확인", state: .primary))
         
-        let array = [phoneTextField, telecomTextField, birthTextField, nameTextField,
-                     phoneTextField, telecomTextField, birthTextField, nameTextField,
-                     phoneTextField, telecomTextField, birthTextField, nameTextField,
-                     phoneTextField, telecomTextField, birthTextField, nameTextField]
+//        let array = [phoneTextField, telecomTextField, birthTextField, nameTextField,
+//                     phoneTextField, telecomTextField, birthTextField, nameTextField,
+//                     phoneTextField, telecomTextField, birthTextField, nameTextField,
+//                     phoneTextField, telecomTextField, birthTextField, nameTextField]
         
 //        let v = ViewConfigurator<MeterialTextField>(item: .init())
         baseView.stackView.addArrangedSubview(v.view)
         
-        for _ in array {
-            let attr = NSAttributedString(string: "휴대폰 번호를\n입력해주세요")
-            var textField =
-//                Component.Configurator<SingleLabel.Reactor>(item: .init(title: .init(title: attr)))
-                ViewConfigurator<SingleLabel>(item: .init(title: .init(title: attr)))
-
+//        for _ in array {
+//            let attr = NSAttributedString(string: "휴대폰 번호를\n입력해주세요")
+//            var textField =
+////                Component.Configurator<SingleLabel.Reactor>(item: .init(title: .init(title: attr)))
+//                ViewConfigurator<SingleLabel>(item: .init(title: .init(title: attr)))
+//
 //SingleLineTextField()
 //            baseView.stackView.addArrangedSubview(textField.view)
 //            textField.rx.textFieldChanged.subscribe(onNext: { textField in
@@ -61,8 +61,8 @@ class StackViewController: BaseViewController<ScrollStackView> {
 //            textField.rx.textFieldFocusOut.subscribe(onNext: { textField in
 //                print(textField)
 //            }).disposed(by: disposeBag)
-
-        }
+//
+//        }
         
 //        for view in baseView.stackView.arrangedSubviews {
 //            view.snp.remakeConstraints {
@@ -73,7 +73,15 @@ class StackViewController: BaseViewController<ScrollStackView> {
             guard let self = self else { return }
             self.handleResignResponderButton()
         }).disposed(by: disposeBag)
-
+        
+        v.view.rx.textFieldChanged.subscribe(onNext: { textField, text in
+            guard let text = text else { return }
+            print(textField)
+            if (text.count)%2 == 0 {
+                textField.showError(with: "잘못 입력했습니다.")
+            }
+            
+        }).disposed(by: disposeBag)
         
     }
     var v = ViewConfigurator<SingleLineTextField>(item: .init(type: .done))

@@ -48,7 +48,7 @@ public enum Colors: String {
     case grayscaleF8
     
     // MARK: Text
-    case textBlueColor
+    case textBlue
     case textRed
     case text07
     case text66
@@ -104,7 +104,7 @@ public extension UIColor {
     static var grayscaleEE = UIColor(named: Colors.grayscaleEE.rawValue) ?? .clear
     static var grayscaleF8 = UIColor(named: Colors.grayscaleF8.rawValue) ?? .clear
     
-    static var textBlueColor = UIColor(named: Colors.textBlueColor.rawValue) ?? .clear
+    static var textBlue = UIColor(named: Colors.textBlue.rawValue) ?? .clear
     static var textRed = UIColor(named: Colors.textRed.rawValue) ?? .clear
     static var text07 = UIColor(named: Colors.text07.rawValue) ?? .clear
     static var text66 = UIColor(named: Colors.text66.rawValue) ?? .clear

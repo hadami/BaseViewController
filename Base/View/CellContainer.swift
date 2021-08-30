@@ -39,6 +39,7 @@ class GenericContainerView<R: ReactorKit.Reactor>: UIView, ReactorKit.View, Conf
         reactor = data
     }
     
+    /// reactor setter 과정에서 disposeBag 초기화
     func bind(reactor: Reactor) {
     }
 }

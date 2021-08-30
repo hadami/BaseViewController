@@ -89,13 +89,11 @@ class BaseButton: GenericContainerView<BaseButtonReactor> {
     convenience init() {
         self.init(frame: .zero)
         setupUI()
-        setupRx()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupRx()
     }
     
     required init(coder: NSCoder) {
@@ -107,6 +105,8 @@ class BaseButton: GenericContainerView<BaseButtonReactor> {
     }
     
     override func bind(reactor: Reactor) {
+        setupRx()
+        
         var insets = reactor.currentState.insets
         let type = reactor.currentState.type
         

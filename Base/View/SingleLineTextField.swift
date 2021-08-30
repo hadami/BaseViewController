@@ -29,45 +29,39 @@ class SingleLineTextFieldReactor: Reactor {
     }
     
     struct State {
-        let type: TextFieldState
+        var type: TextFieldState
     }
     
     let initialState: State
     
-    init(type: TextFieldState) {
+    init(type: TextFieldState = .done) {
         initialState = State(type: type)
     }
 }
 
 class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
-    override func bind(reactor: Reactor) {
-        setState(state: reactor.currentState.type)
-    }
+    fileprivate let borderWidth: CGFloat = 1
+    fileprivate let highlightedBorderWidth: CGFloat = 2
+    fileprivate let normalBorderColor: UIColor = .grayscaleDD
+    fileprivate let highlightedBorderColor: UIColor = .textBlue
+    fileprivate let errorColor: UIColor = .textRed
+    fileprivate let normalTextColor: UIColor = .text66
+    fileprivate let highlightedTextColor: UIColor = .text07
+    fileprivate let disabledTextColor: UIColor = .textBB
     
-    let borderWidth: CGFloat = 1
-    let highlightedBorderWidth: CGFloat = 2
-    let normalBorderColor: UIColor = .grayscaleDD
-    let highlightedBorderColor: UIColor = .textBlueColor
-    let errorColor: UIColor = .textRed
-    let normalTextColor: UIColor = .text66
-    let highlightedTextColor: UIColor = .text07
-    let disabledTextColor: UIColor = .textBB
+    fileprivate let textFieldFont: UIFont = ComponentFont.font(weight: .regular, size: .px18)
+    fileprivate let errorFont: UIFont = ComponentFont.font(weight: .regular, size: .px12)
     
-    let textFieldFont: UIFont = ComponentFont.font(weight: .regular, size: .px18)
-    let errorFont: UIFont = ComponentFont.font(weight: .regular, size: .px12)
+    fileprivate var placeholderLeftConstraint: Constraint?
     
     var textField: UITextField = {
         let v = UITextField()
-//        v.font = ComponentFont.font(weight: .regular, size: .px18)
-//        v.tintColor = .black
-        v.textColor = .text07
-        
         v.borderStyle = .none
         return v
     }()
     
     fileprivate var clearButton: UIButton = {
-        let v = UIButton.init(type: .system)
+        let v = UIButton.init(type: .custom)
         v.setImage(#imageLiteral(resourceName: "eraseAll"), for: .normal)
         return v
     }()
@@ -75,32 +69,28 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
     fileprivate var placeholderLabel: UILabel = {
         let v = UILabel()
         v.text = "라벨"
-//        v.font = ComponentFont.font(weight: .regular, size: .px18)
-//        v.textColor = .text66
         return v
     }()
     
     fileprivate var errorLabel: UILabel = {
         let v = UILabel()
+        v.text = "error"
         return v
     }()
     
     fileprivate var borderView: UIView = {
         let v = UIView()
-//        v.backgroundColor = .lightGray
         return v
     }()
     
     convenience init() {
         self.init(frame: .zero)
         setupUI()
-        setupRx()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupRx()
     }
     
     required init(coder: NSCoder) {
@@ -116,6 +106,8 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         placeholderLabel.font = textFieldFont
         errorLabel.font = errorFont
         
+        textField.tintColor = highlightedTextColor
+        
         addSubview(textField)
         addSubview(clearButton)
         addSubview(placeholderLabel)
@@ -123,34 +115,36 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         addSubview(borderView)
         
         placeholderLabel.snp.remakeConstraints {
-            $0.top.equalToSuperview().inset(10)
-            $0.left.equalToSuperview()
-            $0.height.equalTo(18)
+            placeholderLeftConstraint = $0.left.equalToSuperview().constraint
+            $0.top.equalToSuperview().inset(26)
+            $0.right.lessThanOrEqualToSuperview()
+            $0.height.equalTo(24)
         }
         
-        // TODO: clearButton 처리
         textField.snp.remakeConstraints {
-            $0.left.equalToSuperview()
-            $0.right.equalToSuperview().inset(39)
-            $0.top.equalToSuperview().inset(32)
-            $0.bottom.equalToSuperview().inset(30)
+            let insets = UIEdgeInsets(top: 32, left: 0, bottom: 30, right: 39)
+            $0.edges.equalToSuperview().inset(insets)
         }
         
         clearButton.snp.remakeConstraints {
             $0.right.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(2)
+            $0.centerY.equalTo(textField.snp.centerY)
         }
-        
-        borderView.snp.remakeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(20)
-            $0.height.equalTo(1)
-        }
-        
+
         errorLabel.snp.remakeConstraints {
             $0.left.bottom.equalToSuperview()
-//            $0.height.equalTo(18)
         }
+        
+        self.snp.remakeConstraints {
+            $0.height.equalTo(86)
+        }
+        
+        updateStyle(with: .done)
+    }
+    
+    override func bind(reactor: Reactor) {
+        setupRx()
+        setState(state: .done)
     }
     
     private func setupRx() {
@@ -167,6 +161,27 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         textField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit]).subscribe({ [weak self] _ in
             guard let self = self else { return }
             self.setState(state: .done)
+        }).disposed(by: disposeBag)
+        
+        textField.rx.textChanged.subscribe(onNext: { [weak self] text in
+            guard let self = self else { return }
+            self.setState(state: .editing)
+            
+            // TODO: resign 호출되면 호출됨... 확인하고.... clearButton 숨김 조건 다시 확인
+            let isHidden = text?.isEmpty ?? true
+            if isHidden != self.clearButton.isHidden {
+                self.clearButton.isHidden = false
+                self.clearButton.alpha = isHidden ? 1 : 0
+                
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: { [weak self] in
+                    guard let self = self else { return }
+                    self.clearButton.alpha = isHidden ? 0 : 1
+                    self.clearButton.layoutIfNeeded()
+                }, completion: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.clearButton.isHidden = isHidden
+                })
+            }
         }).disposed(by: disposeBag)
     }
     
@@ -186,29 +201,76 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
             isError = true
         case .done:
             placeholderLabel.textColor = normalTextColor
-            borderView.backgroundColor = borderColor
+            borderView.backgroundColor = normalBorderColor
         case .disabled:
             let color = disabledTextColor
             placeholderLabel.textColor = color
             textField.textColor = color
-            borderView.backgroundColor = borderColor
+            borderView.backgroundColor = normalBorderColor
         }
         errorLabel.isHidden = !isError
-        clearButton.isHidden = state != .editing
         textField.isEnabled = state != .disabled
         
-        UIView.animate(withDuration: 10) { [weak self] in
+        UIView.animate(withDuration: 0.3, delay: 0, options:.curveEaseOut) { [weak self] in
             guard let self = self else { return }
+            self.updateStyle(with: state)
             self.layoutIfNeeded()
         }
     }
+    
+    private func updateStyle(with state: TextFieldState) {
+        placeholderStyle(with: state)
+        
+        let thickness: CGFloat
+        switch state {
+        case .error(_):
+            thickness = 2
+            placeholderLeftConstraint?.errorAnimation(self, from: 4, to: 0)
+            // TODO: 테스트 필요
+            Vibration.error.vibrate()
+        case .editing: thickness = 2
+        default: thickness = 1
+        }
+        borderStyle(with: thickness)
+    }
+    
+    private func borderStyle(with thickness: CGFloat) {
+        borderView.snp.remakeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(20)
+            $0.height.equalTo(thickness)
+        }
+    }
+    
+    private func placeholderStyle(with state: TextFieldState) {
+        guard let text = textField.text, !text.isEmpty || state == .editing else {
+            placeholderLabel.transform = .identity
+            return
+        }
+        
+        let scale = CGAffineTransform(scaleX: 0.75, y: 0.75)
+        let move = CGAffineTransform(translationX: -3.93, y: -19)
+        placeholderLabel.transform = scale.concatenating(move)
+    }
+    
+    func showError(with message: String) {
+        guard let text = textField.text, !text.isEmpty else { return }
+        setState(state: .error(title: message))
+    }
+}
 
+extension Reactive where Base: UITextField {
+    /// text 값이 변경될 때, keyboard 입력 될 때
+    var textChanged: Observable<String?> {
+        return Observable.merge(self.base.rx.observe(String.self, "text"),
+                                self.base.rx.controlEvent(.editingChanged).withLatestFrom(self.base.rx.text))
+    }
 }
 
 extension Reactive where Base: SingleLineTextField {
-    var textFieldChanged: ControlEvent<UITextField> {
-        let source: Observable<UITextField> = self.base.textField.rx.controlEvent([.editingChanged]).asObservable()
-            .flatMap { Observable.just(self.base.textField) }
+    var textFieldChanged: ControlEvent<(SingleLineTextField, String?)> {
+        let source: Observable<(SingleLineTextField, String?)> = self.base.textField.rx.textChanged
+            .flatMap { _ in Observable.just((self.base, self.base.textField.text)) }
       return ControlEvent(events: source)
     }
     

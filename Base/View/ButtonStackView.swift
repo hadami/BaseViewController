@@ -68,13 +68,11 @@ class ButtonStackView: GenericContainerView<ButtonStackViewReactor> {
     convenience init() {
         self.init(frame: .zero)
         setupUI()
-        setupRx()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        setupRx()
     }
     
     required init(coder: NSCoder) {
@@ -87,6 +85,7 @@ class ButtonStackView: GenericContainerView<ButtonStackViewReactor> {
     
     override func bind(reactor: Reactor) {
         // FIXME:
+        setupRx()
         isHiddenButtons = false
         
         let leftType = reactor.currentState.leftType
