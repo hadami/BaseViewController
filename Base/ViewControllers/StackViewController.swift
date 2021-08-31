@@ -77,14 +77,14 @@ class StackViewController: BaseViewController<ScrollStackView> {
         v.view.rx.textFieldChanged.subscribe(onNext: { textField, text in
             guard let text = text else { return }
             print(textField)
-            if (text.count)%2 == 0 {
-                textField.showError(with: "잘못 입력했습니다.")
-            }
+//            if (text.count)%2 == 0 {
+//                textField.showError(with: "잘못 입력했습니다.")
+//            }
             
         }).disposed(by: disposeBag)
         
     }
-    var v = ViewConfigurator<SingleLineTextField>(item: .init(type: .done))
+    var v = ViewConfigurator<SingleLineTextField>(item: .init())
     
     func handleResignResponderButton() {
         v.view.textField.resignFirstResponder()

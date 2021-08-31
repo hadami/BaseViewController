@@ -6,12 +6,27 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
+import SnapKit
 
 class ViewController: UIViewController {
-
+    @IBOutlet weak var textField: UITextField!
+    var disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        print(textField)
+//        textField.delegate = self
+//        self.textField.isEnabled = false
+        
+        textField.rx.controlEvent([.editingDidBegin]).subscribe({ [weak self] _ in
+            guard let self = self else { return }
+            print("editingDidBegin")
+//            self.textField.isSelected = true
+            self.textField.isEnabled = false
+        }).disposed(by: disposeBag)
     }
     
     private func goTo(vc: UIViewController) {
@@ -31,7 +46,7 @@ class ViewController: UIViewController {
         for _ in 0..<10 {
             let empty = Component.Table.Configurator<EmptyView>(item: .init(height: 50))
             let label = Component.Table.Configurator<SingleLabel>(item: .init(title: .init(title: NSAttributedString(string: "SingleLabel"))))
-            let conf = Component.Table.Configurator<SingleLineTextField>(item: .init(type: .done))
+            let conf = Component.Table.Configurator<SingleLineTextField>(item: .init())
             let buttonConf = Component.Table.Configurator<BaseButton>(item: .init(type: .scrollable(title: "확인", state: .primary, type: .H52)))
             items.append(label)
             items.append(empty)

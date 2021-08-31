@@ -11,6 +11,36 @@ import RxSwift
 import SnapKit
 import UIKit
 
+enum TextFieldStyle {
+    case editable(EditStyle)
+    case selectable(SelectStyle)
+    
+    struct EditStyle {
+        var rightViewImage: UIImage?
+        var keyboardType: UIKeyboardType
+        var returnKeyType: UIReturnKeyType
+        var maxCount: Int?
+        
+        init(rightViewImage: UIImage? = #imageLiteral(resourceName: "eraseAll"),
+             keyboardType: UIKeyboardType = .default,
+             returnKeyType: UIReturnKeyType = .done,
+             maxCount: Int? = nil) {
+            self.rightViewImage = rightViewImage
+            self.keyboardType = keyboardType
+            self.returnKeyType = returnKeyType
+            self.maxCount = maxCount
+        }
+    }
+    
+    struct SelectStyle {
+        var rightViewImage: UIImage?
+        
+        init(rightViewImage: UIImage? = #imageLiteral(resourceName: "down")) {
+            self.rightViewImage = rightViewImage
+        }
+    }
+}
+
 enum TextFieldState: Equatable {
     case editing
     case error(title: String)
@@ -29,13 +59,16 @@ class SingleLineTextFieldReactor: Reactor {
     }
     
     struct State {
-        var type: TextFieldState
+        var style: TextFieldStyle
+        var state: TextFieldState
     }
     
     let initialState: State
     
-    init(type: TextFieldState = .done) {
-        initialState = State(type: type)
+    init(style: TextFieldStyle = .selectable(.init()),
+         state: TextFieldState = .done) {
+        initialState = State(style: style,
+                             state: state)
     }
 }
 
@@ -53,6 +86,7 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
     fileprivate let errorFont: UIFont = ComponentFont.font(weight: .regular, size: .px12)
     
     fileprivate var placeholderLeftConstraint: Constraint?
+    fileprivate var borderWidthConstraint: Constraint?
     
     var textField: UITextField = {
         let v = UITextField()
@@ -60,7 +94,7 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         return v
     }()
     
-    fileprivate var clearButton: UIButton = {
+    fileprivate var rightButton: UIButton = {
         let v = UIButton.init(type: .custom)
         v.setImage(#imageLiteral(resourceName: "eraseAll"), for: .normal)
         return v
@@ -109,7 +143,7 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         textField.tintColor = highlightedTextColor
         
         addSubview(textField)
-        addSubview(clearButton)
+        addSubview(rightButton)
         addSubview(placeholderLabel)
         addSubview(errorLabel)
         addSubview(borderView)
@@ -126,7 +160,13 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
             $0.edges.equalToSuperview().inset(insets)
         }
         
-        clearButton.snp.remakeConstraints {
+        borderView.snp.remakeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(20)
+            borderWidthConstraint = $0.height.equalTo(1).constraint
+        }
+        
+        rightButton.snp.remakeConstraints {
             $0.right.equalToSuperview()
             $0.centerY.equalTo(textField.snp.centerY)
         }
@@ -138,54 +178,85 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         self.snp.remakeConstraints {
             $0.height.equalTo(86)
         }
-        
-        updateStyle(with: .done)
     }
     
     override func bind(reactor: Reactor) {
         setupRx()
-        setState(state: .done)
+        
+        setStyle(with: reactor.currentState.style)
+        setState(with: reactor.currentState.state)
+    }
+    
+    private func setStyle(with style: TextFieldStyle) {
+        let image: UIImage?
+        switch style {
+        case .editable(let style):
+            image = style.rightViewImage
+            textField.keyboardType = style.keyboardType
+            textField.returnKeyType = style.returnKeyType
+        case .selectable(let style):
+            image = style.rightViewImage
+        }
+        
+        if let image = image {
+            rightButton.isEnabled = true
+            rightButton.setImage(image, for: .normal)
+        } else {
+            rightButton.isEnabled = false
+        }
     }
     
     private func setupRx() {
-        clearButton.rx.tap.subscribe({ [weak self] _ in
-            guard let self = self else { return }
-            self.textField.text = ""
+        rightButton.rx.tap.subscribe({ [weak self] _ in
+            guard let self = self, let style = self.reactor?.currentState.style else { return }
+            switch style {
+            case .editable(_): self.textField.text = ""
+            case .selectable(_): ()
+            }
         }).disposed(by: disposeBag)
         
         textField.rx.controlEvent([.editingDidBegin]).subscribe({ [weak self] _ in
             guard let self = self else { return }
-            self.setState(state: .editing)
+            self.setState(with: .editing)
         }).disposed(by: disposeBag)
         
         textField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit]).subscribe({ [weak self] _ in
-            guard let self = self else { return }
-            self.setState(state: .done)
+            guard let self = self, let style = self.reactor?.currentState.style else { return }
+            switch style {
+            case .editable(_): self.setState(with: .done)
+            case .selectable(_): ()
+            }
+            
         }).disposed(by: disposeBag)
         
-        textField.rx.textChanged.subscribe(onNext: { [weak self] text in
-            guard let self = self else { return }
-            self.setState(state: .editing)
-            
-            // TODO: resign 호출되면 호출됨... 확인하고.... clearButton 숨김 조건 다시 확인
-            let isHidden = text?.isEmpty ?? true
-            if isHidden != self.clearButton.isHidden {
-                self.clearButton.isHidden = false
-                self.clearButton.alpha = isHidden ? 1 : 0
-                
-                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: { [weak self] in
-                    guard let self = self else { return }
-                    self.clearButton.alpha = isHidden ? 0 : 1
-                    self.clearButton.layoutIfNeeded()
-                }, completion: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.clearButton.isHidden = isHidden
-                })
-            }
+        textField.rx.textChanged.subscribe(onNext: { [weak self] prev, text in
+            guard let self = self, let text = text else { return }
+            // TODO: error > editing 전환은 각 화면에서 직접 핸들링
+            // TODO: editingDidEnd 호출됨 > rightButton 숨김 조건 개선 필요
+            let isHidden = text.isEmpty
+            self.rightButtonStyle(with: isHidden)
         }).disposed(by: disposeBag)
     }
     
-    private func setState(state: TextFieldState) {
+    private func rightButtonStyle(with isHidden: Bool) {
+        if isHidden != self.rightButton.isHidden {
+            self.rightButton.isHidden = false
+            self.rightButton.alpha = isHidden ? 1 : 0
+            
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: { [weak self] in
+                guard let self = self else { return }
+                self.rightButton.alpha = isHidden ? 0 : 1
+                self.rightButton.layoutIfNeeded()
+            }, completion: { [weak self] _ in
+                guard let self = self else { return }
+                self.rightButton.isHidden = isHidden
+            })
+        }
+        
+    }
+    
+    private func setState(with state: TextFieldState) {
+        print("state--------\(state)")
         var isError = false
         
         switch state {
@@ -207,9 +278,9 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
             placeholderLabel.textColor = color
             textField.textColor = color
             borderView.backgroundColor = normalBorderColor
+            textField.isEnabled = false
         }
         errorLabel.isHidden = !isError
-        textField.isEnabled = state != .disabled
         
         UIView.animate(withDuration: 0.3, delay: 0, options:.curveEaseOut) { [weak self] in
             guard let self = self else { return }
@@ -225,21 +296,13 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
         switch state {
         case .error(_):
             thickness = 2
-            placeholderLeftConstraint?.errorAnimation(self, from: 4, to: 0)
+            placeholderLeftConstraint?.errorAnimation(self, from: -2, to: 0)
             // TODO: 테스트 필요
             Vibration.error.vibrate()
         case .editing: thickness = 2
-        default: thickness = 1
+        case .done, .disabled: thickness = 1
         }
-        borderStyle(with: thickness)
-    }
-    
-    private func borderStyle(with thickness: CGFloat) {
-        borderView.snp.remakeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(20)
-            $0.height.equalTo(thickness)
-        }
+        borderWidthConstraint?.update(offset: thickness)
     }
     
     private func placeholderStyle(with state: TextFieldState) {
@@ -255,15 +318,16 @@ class SingleLineTextField: GenericContainerView<SingleLineTextFieldReactor> {
     
     func showError(with message: String) {
         guard let text = textField.text, !text.isEmpty else { return }
-        setState(state: .error(title: message))
+        setState(with: .error(title: message))
     }
 }
 
 extension Reactive where Base: UITextField {
     /// text 값이 변경될 때, keyboard 입력 될 때
-    var textChanged: Observable<String?> {
-        return Observable.merge(self.base.rx.observe(String.self, "text"),
-                                self.base.rx.controlEvent(.editingChanged).withLatestFrom(self.base.rx.text))
+    var textChanged: Observable<(String?, String?)> {
+        return Observable.merge(self.base.rx.observe(String.self, "text").flatMap { text in Observable.just((self.base.text, text)) },
+                                self.base.rx.controlEvent(.editingChanged)
+                                    .withLatestFrom(self.base.rx.text).flatMap { text in Observable.just((self.base.text, text)) })
     }
 }
 

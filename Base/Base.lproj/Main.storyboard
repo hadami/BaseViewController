@@ -83,6 +83,12 @@
                                     <constraint firstItem="uFF-Tn-V2q" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="cVM-x7-XQa" secondAttribute="leading" id="xzc-wm-5u2"/>
                                 </constraints>
                             </view>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jQw-E4-jOs">
+                                <rect key="frame" x="43" y="201" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -94,6 +100,9 @@
                             <constraint firstItem="CMt-bJ-3gX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="yTH-tJ-Psz"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="textField" destination="jQw-E4-jOs" id="lgj-eJ-70F"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

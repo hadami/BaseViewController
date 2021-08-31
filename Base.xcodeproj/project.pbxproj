@@ -50,6 +50,7 @@
 		89B31E4026BD0A1D0082C3CF /* CellContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */; };
 		89B3A2C226DCD512004D11F4 /* Vibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B3A2C126DCD512004D11F4 /* Vibration.swift */; };
 		89B3D6C326CA99BD00563457 /* CellComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B3D6C226CA99BD00563457 /* CellComponent.swift */; };
+		89C51BE726DE3D4400B4F254 /* SingleLineSelectableField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C51BE626DE3D4400B4F254 /* SingleLineSelectableField.swift */; };
 		89C6DBE926D4C0740025E312 /* SingleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6DBE726D4C0740025E312 /* SingleLabel.swift */; };
 		89C6DBEA26D4C0740025E312 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6DBE826D4C0740025E312 /* EmptyView.swift */; };
 		89C6DBED26D4C35F0025E312 /* ButtonStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C6DBEB26D4C35F0025E312 /* ButtonStackView.swift */; };
@@ -108,6 +109,7 @@
 		89B31E3F26BD0A1D0082C3CF /* CellContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellContainer.swift; sourceTree = "<group>"; };
 		89B3A2C126DCD512004D11F4 /* Vibration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vibration.swift; sourceTree = "<group>"; };
 		89B3D6C226CA99BD00563457 /* CellComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellComponent.swift; sourceTree = "<group>"; };
+		89C51BE626DE3D4400B4F254 /* SingleLineSelectableField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleLineSelectableField.swift; sourceTree = "<group>"; };
 		89C6DBE726D4C0740025E312 /* SingleLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleLabel.swift; sourceTree = "<group>"; };
 		89C6DBE826D4C0740025E312 /* EmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		89C6DBEB26D4C35F0025E312 /* ButtonStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonStackView.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				897EFF6826BBDFAE006AF830 /* CellConfigurator.swift */,
 				89B2970326D8B30E002D232E /* MeterialTextField.swift */,
 				89D9D86E26BAADAD00737E3A /* SingleLineTextField.swift */,
+				89C51BE626DE3D4400B4F254 /* SingleLineSelectableField.swift */,
 				89953FF226BA840200C28C86 /* BaseNavigationBar.swift */,
 				89D9D87526BAD22C00737E3A /* ScrollStackView.swift */,
 				89C6DBEC26D4C35F0025E312 /* BaseButton.swift */,
@@ -412,6 +415,7 @@
 				89B296E126D8ABAB002D232E /* Shape.swift in Sources */,
 				89B296FF26D8B0DB002D232E /* View.swift in Sources */,
 				89B296F926D8AD7A002D232E /* Grid.swift in Sources */,
+				89C51BE726DE3D4400B4F254 /* SingleLineSelectableField.swift in Sources */,
 				89C6DBED26D4C35F0025E312 /* ButtonStackView.swift in Sources */,
 				89B3A2C226DCD512004D11F4 /* Vibration.swift in Sources */,
 				89B296DF26D8AB9E002D232E /* HeightPreset.swift in Sources */,
